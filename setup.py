@@ -35,7 +35,7 @@ DESCRIPTION = metadata.get('description', 'Astronomical dust attenuation')
 AUTHOR = metadata.get('author', 'Karl Gordon')
 AUTHOR_EMAIL = metadata.get('author_email', '')
 LICENSE = metadata.get('license', 'unknown')
-URL = metadata.get('url', 'http://dust-eattenuation.readthedocs.io/')
+URL = metadata.get('url', 'http://dust-attenuation.readthedocs.io/')
 
 # order of priority for long_description:
 #   (1) set in setup.cfg,
