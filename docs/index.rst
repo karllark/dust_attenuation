@@ -15,7 +15,7 @@ In contrast, dust extinction refers to the effects of dust on measurements
 of a single star.  In this case, dust absorbs and scatters photons out of
 the line-of-sight, but the contribution from scattered photons into the
 line-of-sight is negligible.  For extinction models, see
-the `dust_extinction<https://github.com/karllark/dust_attenuation>`_ package.
+the `dust_attenuation <https://github.com/karllark/dust_attenuation>`_ package.
 
 
 This package is developed in the
@@ -31,7 +31,6 @@ User Documenation
    :maxdepth: 2
 
    Flavors of Models <dust_attenuation/model_flavors.rst>
-   Attenuate (or unattenuate) data <dust_attenuation/attenuate.rst>
    How to choose a model <dust_attenuation/choose_model.rst>
    References <dust_attenuation/references.rst>
 
