@@ -48,7 +48,7 @@ class S07(Fittable1DModel):
 
     """
     inputs = ('x',)
-    outputs = ('axav',)
+    outputs = ('tau')#('axav',)
 
     kvt_wav = [8.0, 8.2, 8.4, 8.6, 8.8, 9.0, 9.2, 9.4, 9.6, 9.7, 
                9.75, 9.8, 10.0, 10.2, 10.4, 10.6,10.8, 11.0, 11.2, 11.4, 
@@ -83,5 +83,5 @@ class S07(Fittable1DModel):
         
         # assuing beta is 0.1 
         beta = 0.1
-        axav = amp * ((1.0-beta)*ext + beta*(9.7/in_x)**1.7)
-        return axav # This term is in fact tau right now
+        tau = amp * ((1.0-beta)*ext + beta*(9.7/in_x)**1.7)
+        return tau
