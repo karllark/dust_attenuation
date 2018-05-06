@@ -10,4 +10,4 @@ def _invalid_x_range(x, tmodel, modname):
                                 + str(tmodel.x_range[0]) \
                                 + ' <= x <= ' \
                                 + str(tmodel.x_range[1]) \
-                                + ', x has units 1/micron]'
+                                + ', x has units micron]'

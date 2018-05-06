@@ -4,7 +4,7 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..dust_attenuation import C00
+from ..C00 import C00
 from .helpers import _invalid_x_range
 
 
@@ -15,25 +15,25 @@ def test_invalid_Av_input(Av_invalid):
     assert exc.value.args[0] == 'parameter Av must be positive'
 
 
-@pytest.mark.parametrize("x_invalid", [-1.0, 0.2, 10.1, 100.])
+@pytest.mark.parametrize("x_invalid", [-1.0, 0.1, 10.1, 100.])
 def test_invalid_wavenumbers(x_invalid):
     _invalid_x_range(x_invalid, C00(Av=1), 'C00')
 
 
 @pytest.mark.parametrize("x_invalid_wavenumber",
-                         [-1.0, 0.2, 10.1, 100.]/u.micron)
+                         [-1.0, 0.1, 10.1, 100.]/u.micron)
 def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
     _invalid_x_range(x_invalid_wavenumber, C00(Av=1), 'C00')
 
 
 @pytest.mark.parametrize("x_invalid_micron",
-                         u.micron/[-1.0, 0.2, 10.1, 100.])
+                         u.micron/[-1.0, 0.1, 10.1, 100.])
 def test_invalid_micron(x_invalid_micron):
     _invalid_x_range(x_invalid_micron, C00(Av=1), 'C00')
 
 
 @pytest.mark.parametrize("x_invalid_angstrom",
-                         u.angstrom*1e4/[-1.0, 0.2, 10.1, 100.])
+                         u.angstrom*1e4/[-1.0, 0.1, 10.1, 100.])
 def test_invalid_micron(x_invalid_angstrom):
     _invalid_x_range(x_invalid_angstrom, C00(Av=1), 'C00')
 
