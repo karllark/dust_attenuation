@@ -50,12 +50,12 @@ class WG00(BaseAtttauVModel):
         fig, ax = plt.subplots()
 
         # generate the curves and plot them
-        x = np.arange(0.33,10.0,0.1)/u.micron
+        x = np.arange(0.33,10.0,0.1)*u.micron
 
         tau_Vs = [0.25,0.4,1.1,17.0,46.0]
         for tau_V in tau_vs:
            att_model = WG00(tau_V=tau_V)
-           ax.plot(x,att_model(x),label=r'$\tau_V$ = %.2f mag' % (tau_Av))
+           ax.plot(1/x,att_model(x),label=r'$\tau_V$ = %.2f mag' % (tau_Av))
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
         ax.set_ylabel('$\tau(x)$ [mag]')
@@ -148,17 +148,17 @@ class WG00(BaseAtttauVModel):
         #return model
     
     
-    def evaluate(self, in_x, tau_V):
+    def evaluate(self, x, tau_V):
         """
         WG00 function
 
         Parameters
         ----------
-        in_x: float
+        x: float
            expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+           or assumes wavelengths in [micron]
 
-           internally wavenumbers are used
+           internally microns are used
 
         Returns
         -------
@@ -173,12 +173,12 @@ class WG00(BaseAtttauVModel):
         # convert to wavenumbers (1/micron) if x input in units
         # otherwise, assume x in appropriate wavenumber units
         with u.add_enabled_equivalencies(u.spectral()):
-            x_quant = u.Quantity(in_x, u.micron, dtype=np.float64)
+            x_quant = u.Quantity(x, u.micron, dtype=np.float64)
 
         # strip the quantity to avoid needing to add units to all the
         #    polynomical coefficients
         x = x_quant.value
-
+        
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_WG00, 'WG00')
 
@@ -186,7 +186,7 @@ class WG00(BaseAtttauVModel):
         n_x = len(x)
         axEbv = np.zeros(n_x)
 
-        xinterp = 1e4 * in_x 
+        xinterp = 1e4 * x 
         yinterp = tau_V * np.ones(n_x)
        
         taux = self.model(xinterp, yinterp) 

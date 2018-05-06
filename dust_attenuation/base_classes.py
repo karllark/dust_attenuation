@@ -11,7 +11,7 @@ from astropy.modeling import (Model, Fittable1DModel,
 
 __all__ = ['C00']
 
-x_range_C00 = [1.0/2.2, 1.0/0.12]
+x_range_C00 = [0.12, 2.2]
 
 def _test_valid_x_range(x, x_range, outname):
     """
@@ -20,7 +20,7 @@ def _test_valid_x_range(x, x_range, outname):
     Parameters
     ----------
     x : float array
-       wavenumbers in inverse microns
+       wavelength in microns
 
     x_range: 2 floats
        allowed min/max of x
@@ -35,7 +35,7 @@ def _test_valid_x_range(x, x_range, outname):
                          + str(x_range[0])
                          + ' <= x <= '
                          + str(x_range[1])
-                         + ', x has units 1/micron]')
+                         + ', x has units micron]')
 
 class BaseAttModel(Fittable1DModel):
     """
@@ -52,9 +52,9 @@ class BaseAttModel(Fittable1DModel):
         ----------
         x: float
            expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+           or assumes wavelengths in [micron]
 
-           internally wavenumbers are used
+           internally microns are used
 
         Av: float
            A(V) value of dust column
