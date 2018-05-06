@@ -83,6 +83,7 @@ class BaseAttModel(Fittable1DModel):
         # return fractional attenuation
         return np.power(10.0, -0.4*axav*Av)
 
+
 class BaseAttAvModel(BaseAttModel):
     """
     Base attenuation Av Model.  Do not use.
@@ -108,5 +109,35 @@ class BaseAttAvModel(BaseAttModel):
 
         if (value < 0.0):
             raise InputParameterError("parameter Av must be positive")
+
                                       
+class BaseAtttauVModel(BaseAttModel):
+    """
+    Base attenuation tau_V Model.  Do not use.
+    """
+    tau_V = Parameter(description="tau_V: optical depth in V band ",
+                   default=1.0, min=0.25, max=50.00)
+
+    @tau_V.validator
+    def tau_V(self, value):
+        """
+        Check that tau_V is in the valid range
+
+        Parameters
+        ----------
+        value: float
+            tau_V value to check
+
+        Raises
+        ------
+        InputParameterError
+           Input tau_V values outside of defined range
+        """
+        if not (self.tau_V_range[0] <= value <= self.tau_V_range[1]):
+            raise InputParameterError("parameter tau_V must be between "
+                                      + str(self.tau_V_range[0])
+                                      + " and "
+                                      + str(self.tau_V_range[1]))
+
+
 
