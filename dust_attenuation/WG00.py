@@ -45,24 +45,36 @@ class WG00(BaseAtttauVModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_attenuation.dust_attenuation import WG00
+        from dust_attenuation.WG00 import WG00
 
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(1,2, figsize=(10,6))
 
         # generate the curves and plot them
-        x = np.arange(0.33,10.0,0.1)*u.micron
+        # Use 1/microns for a better sampling
+        x = np.arange(0.35,10.0,0.1)/u.micron
 
+        x_Vband = 0.55 # microns
+        
         tau_Vs = [0.25,0.4,1.1,17.0,46.0]
-        for tau_V in tau_vs:
+        for tau_V in tau_Vs[::-1]:
            att_model = WG00(tau_V=tau_V)
-           ax.plot(1/x,att_model(x),label=r'$\tau_V$ = %.2f mag' % (tau_Av))
+           att_model.get_model(geometry = 'cloudy', dust_type = 'mw', dust_distribution = 'clumpy')
+           ax[0].plot(x,att_model(1/x),label=r'$\tau_V$ = %.2f mag' % (tau_V))
+           ax[1].plot(x,att_model(1/x)/att_model(x_Vband),label=r'$\tau_V$ = %.2f mag' % (tau_V))
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$\tau(x)$ [mag]')
+        ax[0].set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax[0].set_ylabel(r'$\tau(x)$ [mag]')
+        ax[1].set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax[1].set_ylabel(r'$\tau(x)/\tau_V$')
+        
+        
+        ax[0].legend(loc='best')
+        ax[1].legend(loc='best')
+        fig.suptitle(r'CLOUDY / MW / clumpy model',size=15)
+        plt.tight_layout()
+        fig.subplots_adjust(top=0.88)
 
-        ax.legend(loc='best')
         plt.show()
-
 
     """
     tau_V_range = [0.25, 50.0]
