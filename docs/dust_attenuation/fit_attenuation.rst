@@ -70,6 +70,89 @@ Example: Use WG00 to fit C00
 =================
 
 In this example, we are using the WG00 attenuation curves to 
-fit the original Calzetti attenuation curve with Av =1mag.
+fit the original Calzetti attenuation curve with Av = 1 mag.
+The 2 configurations best fittind the C00 curves are for a SMC 
+in either a SHELL geometry with clumpy dust distribution or a
+DUSTY geometry with homogeneous dust distribution.
 
 
+.. plot::
+   :include-source:
+
+   import numpy as np
+   import matplotlib.pyplot as plt
+   from astropy.modeling.fitting import LevMarLSQFitter
+   import astropy.units as u
+
+   from dust_attenuation.C00 import C00
+   from dust_attenuation.WG00 import WG00
+
+   # Generate the C00 curve with Av = 1mag and add some noise
+   x = np.arange(1/2,1/0.15,0.1)/u.micron
+   x=1/x
+   att_model = C00(Av=1)
+   y = att_model(x)
+   noise = np.random.normal(0, 0.05, y.shape)
+   y+=noise
+
+   # Convert A_lambda to tau_lambda
+   y /= 1.086
+
+   # Wavelength of V band
+   x_Vband = 0.55
+
+   geometries = ['shell', 'cloudy', 'dusty']
+   dust_types = ['MW', 'SMC']
+   dust_distribs = ['homogeneous', 'clumpy']
+
+   # initialize the model
+   WG00_init = WG00(tau_V=2)
+
+   # pick the fitter
+   fit = LevMarLSQFitter()
+
+   # plot the observed data, initial guess, and final fit
+   plt.figure(figsize=(10,6))
+
+   plt.plot(1/x, y, 'ko', label='C00')
+
+   # Loop over the different configurations
+   for geo in geometries:
+      for dust in dust_types:
+          for distrib in dust_distribs:
+            
+              label = geo + '_' + dust + '_' + distrib[0]
+            
+              if geo == 'cloudy': color = 'red'
+              elif geo == 'dusty': color = 'blue'
+              elif geo == 'shell': color = 'green'
+            
+              if dust == 'MW': marker = 'o'
+              elif dust == 'SMC': marker = '^'
+                
+              if distrib == 'homogeneous': ls = '--'
+              if distrib == 'clumpy':  ls = '-'
+            
+                
+              WG00_init.get_model(geometry = geo,
+                                  dust_type = dust,
+                                  dust_distribution = distrib)
+
+
+              # fit the data to the FM90 model using the fitter
+              #   use the initialized model as the starting point
+              WG00_fit = fit(WG00_init, x.value, y)
+
+              plt.plot(1/x.value, WG00_fit(x.value) / WG00_fit(x_Vband),
+                       label = label, ls = ls, lw = 2, color = color,
+                       marker = marker, markevery = 10, markersize = 8 )
+
+            
+   plt.xlabel('$x$ [$\mu m^{-1}$]',size=16)
+   plt.ylabel(r'$\tau / \tau_V $',size=16)
+
+   plt.title('Example: fit C00 with WG00', size =20)
+   plt.tick_params(labelsize=15)
+   plt.legend(loc='center left',fontsize=18,bbox_to_anchor=(1, 0.5))
+   plt.tight_layout()
+   plt.show()
