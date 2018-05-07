@@ -112,7 +112,7 @@ DUSTY geometry with homogeneous dust distribution.
    fit = LevMarLSQFitter()
 
    # plot the observed data, initial guess, and final fit
-   plt.figure(figsize=(10,6))
+   plt.figure(figsize=(15,9))
 
    plt.plot(1/x, y, 'ko', label='C00')
 
@@ -153,6 +153,6 @@ DUSTY geometry with homogeneous dust distribution.
 
    plt.title('Example: fit C00 with WG00', size =20)
    plt.tick_params(labelsize=15)
-   plt.legend(loc='center left',fontsize=18,bbox_to_anchor=(1, 0.5))
+   plt.legend(loc='upper left',fontsize=18)
    plt.tight_layout()
    plt.show()

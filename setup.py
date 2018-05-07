@@ -147,5 +147,6 @@ setup(name=PACKAGENAME,
       use_2to3=False,
       entry_points=entry_points,
       python_requires='>={}'.format(__minimum_python_version__),
+      include_package_data=True,
       **package_info
 )
