@@ -70,7 +70,8 @@ Example: Use WG00 to fit C00
 =================
 
 In this example, we are using the WG00 attenuation curves to
-fit the original Calzetti attenuation curve with Av = 1 mag.
+fit the original Calzetti attenuation curve with Av = 1 mag,
+i.e. similar to the normalised attenuation curve.
 The 2 configurations best fittind the C00 curves are for a SMC
 in either a SHELL geometry with clumpy dust distribution or a
 DUSTY geometry with homogeneous dust distribution.
