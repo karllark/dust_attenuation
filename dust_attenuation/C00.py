@@ -17,7 +17,7 @@ x_range_C00 = [0.12, 2.2]
 
 
 class C00(BaseAttAvModel):
-    """ 
+    """
     Attenuation curve of Calzetti et al. (2000)
 
     Parameters
@@ -32,7 +32,7 @@ class C00(BaseAttAvModel):
 
     Notes
     -----
-    
+
     From Calzetti (2000, ApJ, Volume 533, Issue 2, pp. 682-695)
 
     Example:
@@ -64,7 +64,7 @@ class C00(BaseAttAvModel):
 
 
     """
-  
+
     x_range = x_range_C00
 
 
@@ -109,7 +109,7 @@ class C00(BaseAttAvModel):
 
         # Rv is fixed to 4.05
         Rv = 4.05
- 
+
         # define the ranges
         uv2vis_indxs = np.where(np.logical_and(0.12 <= x, x < 0.63 ))
         nir_indxs = np.where(np.logical_and( 0.63 <= x, x < 2.2 ))
@@ -125,4 +125,3 @@ class C00(BaseAttAvModel):
         ax = axEbv / Rv * Av
 
         return ax
-

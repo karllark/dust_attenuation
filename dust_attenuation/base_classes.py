@@ -110,7 +110,7 @@ class BaseAttAvModel(BaseAttModel):
         if (value < 0.0):
             raise InputParameterError("parameter Av must be positive")
 
-                                      
+
 class BaseAtttauVModel(BaseAttModel):
     """
     Base attenuation tau_V Model.  Do not use.
@@ -138,6 +138,3 @@ class BaseAtttauVModel(BaseAttModel):
                                       + str(self.tau_V_range[0])
                                       + " and "
                                       + str(self.tau_V_range[1]))
-
-
-

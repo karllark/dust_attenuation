@@ -54,7 +54,7 @@ def test_axav_c00_table3():
 
     # test (table in paper has limited precision)
     #np.testing.assert_allclose(tmodel(x), cor_vals, atol=1e-2)
-    
+
 
 def get_axav_cor_vals(Rv):
     # testing wavenumbers
