@@ -4,6 +4,7 @@
 
 import numpy as np
 import astropy.units as u
+import pkg_resources
 
 from astropy.io import ascii
 from astropy.table import Table
@@ -109,14 +110,10 @@ class WG00(BaseAtttauVModel):
         dust_type = dust_type.lower()
         dust_distribution = dust_distribution.lower()
 
-        if geometry == 'shell':
-            filename = '/data/WG00/shell.txt' 
-        elif geometry == 'dusty':
-            filename = '/data/WG00/dusty.txt' 
-        elif geometry == 'cloudy':
-            filename = '/data/WG00/cloudy.txt' 
+        data_path = pkg_resources.resource_filename('dust_attenuation',
+                                                    'data/WG00/')
         
-        data=ascii.read(filename,header_start=0)
+        data=ascii.read(data_path+geometry+'.txt',header_start=0)
 
         if dust_type == 'mw': 
             start = 0
