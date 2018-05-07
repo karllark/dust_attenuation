@@ -110,11 +110,11 @@ class WG00(BaseAtttauVModel):
         dust_distribution = dust_distribution.lower()
 
         if geometry == 'shell':
-            filename = '../dust_attenuation/data/WG00/shell.txt' 
+            filename = '/data/WG00/shell.txt' 
         elif geometry == 'dusty':
-            filename = '../dust_attenuation/data/WG00/dusty.txt' 
+            filename = '/data/WG00/dusty.txt' 
         elif geometry == 'cloudy':
-            filename = '../dust_attenuation/data/WG00/cloudy.txt' 
+            filename = '/data/WG00/cloudy.txt' 
         
         data=ascii.read(filename,header_start=0)
 
