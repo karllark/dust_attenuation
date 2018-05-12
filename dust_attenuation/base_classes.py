@@ -11,7 +11,7 @@ from astropy.modeling import (Model, Fittable1DModel,
 
 __all__ = ['C00']
 
-x_range_C00 = [1.0/2.2, 1.0/0.12]
+x_range_C00 = [0.12, 2.2]
 
 def _test_valid_x_range(x, x_range, outname):
     """
@@ -20,7 +20,7 @@ def _test_valid_x_range(x, x_range, outname):
     Parameters
     ----------
     x : float array
-       wavenumbers in inverse microns
+       wavelength in microns
 
     x_range: 2 floats
        allowed min/max of x
@@ -35,7 +35,7 @@ def _test_valid_x_range(x, x_range, outname):
                          + str(x_range[0])
                          + ' <= x <= '
                          + str(x_range[1])
-                         + ', x has units 1/micron]')
+                         + ', x has units micron]')
 
 class BaseAttModel(Fittable1DModel):
     """
@@ -52,9 +52,9 @@ class BaseAttModel(Fittable1DModel):
         ----------
         x: float
            expects either x in units of wavelengths or frequency
-           or assumes wavelengths in wavenumbers [1/micron]
+           or assumes wavelengths in [micron]
 
-           internally wavenumbers are used
+           internally microns are used
 
         Av: float
            A(V) value of dust column
@@ -83,6 +83,7 @@ class BaseAttModel(Fittable1DModel):
         # return fractional attenuation
         return np.power(10.0, -0.4*axav*Av)
 
+
 class BaseAttAvModel(BaseAttModel):
     """
     Base attenuation Av Model.  Do not use.
@@ -108,5 +109,32 @@ class BaseAttAvModel(BaseAttModel):
 
         if (value < 0.0):
             raise InputParameterError("parameter Av must be positive")
-                                      
 
+
+class BaseAtttauVModel(BaseAttModel):
+    """
+    Base attenuation tau_V Model.  Do not use.
+    """
+    tau_V = Parameter(description="tau_V: optical depth in V band ",
+                   default=1.0, min=0.25, max=50.00)
+
+    @tau_V.validator
+    def tau_V(self, value):
+        """
+        Check that tau_V is in the valid range
+
+        Parameters
+        ----------
+        value: float
+            tau_V value to check
+
+        Raises
+        ------
+        InputParameterError
+           Input tau_V values outside of defined range
+        """
+        if not (self.tau_V_range[0] <= value <= self.tau_V_range[1]):
+            raise InputParameterError("parameter tau_V must be between "
+                                      + str(self.tau_V_range[0])
+                                      + " and "
+                                      + str(self.tau_V_range[1]))
