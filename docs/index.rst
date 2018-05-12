@@ -31,6 +31,7 @@ User Documenation
    :maxdepth: 2
 
    Flavors of Models <dust_attenuation/model_flavors.rst>
+   Fitting attenuation curves <dust_attenuation/fit_attenuation.rst>
    How to choose a model <dust_attenuation/choose_model.rst>
    References <dust_attenuation/references.rst>
 
