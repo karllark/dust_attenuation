@@ -1,6 +1,6 @@
-#####################
+######################
 Fit Attenuation Curves
-#####################
+######################
 
 The ``dust_attenuation`` package is built on the `astropy.modeling
 <http://docs.astropy.org/en/stable/modeling/>`_ package.  Fitting is
@@ -9,7 +9,7 @@ with a starting point (either the default or user input), the fitter
 is chosen, and the fit performed.
 
 Example: C00 Fit
-=================
+================
 
 In this example, we create some artificial curve with the C00 model
 and explain how to fit an attenuation curve with it.
@@ -67,7 +67,7 @@ and explain how to fit an attenuation curve with it.
 
 
 Example: Use WG00 to fit C00
-=================
+============================
 
 In this example, we are using the WG00 attenuation curves to
 fit the original Calzetti attenuation curve with Av = 1 mag,
