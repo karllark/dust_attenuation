@@ -24,8 +24,8 @@ template and uses the
 `astropy.modeling <http://docs.astropy.org/en/stable/modeling/>`_
 framework.
 
-User Documenation
-=================
+User Documentation
+==================
 
 .. toctree::
    :maxdepth: 2
@@ -92,4 +92,6 @@ contributors page on Github
 Reference API
 =============
 
-TBA.
+.. automodapi:: dust_attenuation.C00
+
+.. automodapi:: dust_attenuation.WG00
