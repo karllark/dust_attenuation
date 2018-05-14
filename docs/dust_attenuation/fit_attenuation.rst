@@ -70,7 +70,7 @@ Example: Use WG00 to fit C00
 ============================
 
 In this example, we are using the WG00 attenuation curves to
-fit the Calzetti attenuation curve (C00 model) with Av = 1 mag.
+fit the Calzetti attenuation curve (C00 model) with Av = 1 mag and noise.
 The two WGOO configurations that best fit both have SMC-type dust and are
 the SHELL geometry with clumpy dust distribution and the
 DUSTY geometry with homogeneous dust distribution.
@@ -86,7 +86,7 @@ DUSTY geometry with homogeneous dust distribution.
     from dust_attenuation.C00 import C00
     from dust_attenuation.WG00 import WG00
 
-    # Generate the C00 curve with Av = 1mag and add some noise
+    # Generate the C00 curve with Av = 1 mag and add some noise
     x = np.arange(1/2, 1/0.15, 0.1)/u.micron
     x= 1/x
     att_model = C00(Av=1)
@@ -143,7 +143,7 @@ DUSTY geometry with homogeneous dust distribution.
                 WG00_fit = fit(WG00_init, x.value, y)
 
                 # add best fitting Att(V) value to label
-                label = '(%s Att(V) = %d.3)' % (label, 1.086*WG00_fit.tau_V)
+                label = '(%s; A(V) = %d.3)' % (label, 1.086*WG00_fit.tau_V)
 
                 plt.plot(1/x.value, WG00_fit(x.value),
                          label = label, ls = ls, lw = 2, color = color,
