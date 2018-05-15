@@ -143,7 +143,7 @@ DUSTY geometry with homogeneous dust distribution.
                 WG00_fit = fit(WG00_init, x.value, y)
 
                 # add best fitting Att(V) value to label
-                label = '(%s; A(V) = %d.3)' % (label, 1.086*WG00_fit.tau_V)
+                label = '%s; A(V) = %d.3' % (label, 1.086*WG00_fit.tau_V)
 
                 plt.plot(1/x.value, WG00_fit(x.value),
                          label = label, ls = ls, lw = 2, color = color,
