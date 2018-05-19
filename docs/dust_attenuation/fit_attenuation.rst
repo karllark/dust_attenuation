@@ -94,9 +94,6 @@ DUSTY geometry with homogeneous dust distribution.
     noise = np.random.normal(0, 0.05, y.shape)
     y += noise
 
-    # Convert A_lambda to tau_lambda
-    y /= 1.086
-
     # Wavelength of V band
     x_Vband = 0.55
 
@@ -145,7 +142,7 @@ DUSTY geometry with homogeneous dust distribution.
                 # add best fitting Att(V) value to label
                 label = '%s; A(V) = %d.3' % (label, 1.086*WG00_fit.tau_V)
 
-                plt.plot(1/x.value, WG00_fit(x.value),
+                plt.plot(1/x.value, 1.086*WG00_fit(x.value),
                          label = label, ls = ls, lw = 2, color = color,
                          marker = marker, markevery = 10, markersize = 8 )
 
