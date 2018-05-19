@@ -130,7 +130,6 @@ DUSTY geometry with homogeneous dust distribution.
                 if distrib == 'homogeneous': ls = '--'
                 if distrib == 'clumpy':  ls = '-'
 
-
                 WG00_init.get_model(geometry = geo,
                                     dust_type = dust,
                                     dust_distribution = distrib)
@@ -140,9 +139,11 @@ DUSTY geometry with homogeneous dust distribution.
                 WG00_fit = fit(WG00_init, x.value, y)
 
                 # add best fitting Att(V) value to label
-                label = '%s; A(V) = %d.3' % (label, 1.086*WG00_fit.tau_V)
+                #   since the C00 model is in Att units, then best fit
+                #   tau_V value will actually be Att(V)
+                label = '%s; A(V) = %d.3' % (label, WG00_fit.tau_V.value)
 
-                plt.plot(1/x.value, 1.086*WG00_fit(x.value),
+                plt.plot(1/x.value, WG00_fit(x.value),
                          label = label, ls = ls, lw = 2, color = color,
                          marker = marker, markevery = 10, markersize = 8 )
 
