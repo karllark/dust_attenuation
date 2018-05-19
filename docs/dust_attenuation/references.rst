@@ -2,7 +2,11 @@
 References
 ##########
 
-Need some.
+C00: `Calzetti et al. 2000, ApJ, 533, 682
+<http://adsabs.harvard.edu/abs/2000ApJ...533..682C>`_
+
+WG00: `Witt & Gordon 2000, ApJ, 528, 799
+<http://adsabs.harvard.edu/abs/2000ApJ...528..799W>`_
 
 Naming Convention
 =================

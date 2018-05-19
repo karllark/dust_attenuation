@@ -8,26 +8,250 @@ and shape fitting.
 Average models
 ==============
 
-   These models provide averages from the literature with the ability to
-   interpolate between the observed data points.
+These models provide averages from the literature with the ability to
+interpolate between the observed data points.  In general, these average
+models have shapes that are not dependent on the amount of dust.
 
-   Calzetti.  Any others?
+The `COO` average attenuation model is based on a small number of
+starburst galaxies observed
+in the ultraviolet with the International Ultraviolet Explorer (IUE)
+supplemented with ground-based optical spectroscopy,
+near-infrared photometry, and
+Infrared Space Observatory (ISO) far-infrared photometry
+(Calzetti et al. 2000).
+
+.. plot::
+
+      import math
+      import numpy as np
+      import matplotlib.pyplot as plt
+      import astropy.units as u
+
+      from dust_attenuation.C00 import C00
+
+      fig, ax = plt.subplots()
+
+      # generate the curves and plot them
+      ix = np.arange(1.0/2.2, 1.0/0.12 ,0.1)/u.micron
+      x = 1/ix
+      att_model = C00(Av=1.0)
+      ax.plot(x,att_model(x),label='C00')
+
+      ax.set_xlabel('$\lambda$ [$\mu m$]')
+      ax.set_ylabel('$Att(\lambda)/Att(V)$')
+
+      ax.set_xscale('log')
+      ax.set_xlim(0.1,3.0)
+
+      ax.legend(loc='best')
+      plt.tight_layout()
+      plt.show()
+
 
 Radiative Transfer Based Models
 ===============================
 
-   These models provide predictions on the shape based on amount of dust,
-   star/dust geometry, and other star/dust parameters.
+These models provide attenuation predictions based on dust radiative transfer
+calculations.  The attenuation curve strength and wavelength dependent shape
+are based on the amount of dust, star/dust geometry, and other
+parameters.
 
-   Witt & Gordon (2000) spherical galactic environments.
+The `WG00` attenuation models are based on DIRTY radiative transfer
+calculations for spherical galactic environments (shell, dusty, cloudy)
+with homogeneous or clumpy local dust distributions using
+empirical Milky Way (MW) and Small Magellanic Cloud (SMC)
+dust grain properties (Witt & Gordon 2000).
+The `WG00` models were chosen to span the range of
+possible star/dust geometries and types of dust grains.
 
+Example `WG00` models showing variation in shape with amount of dust.
+
+.. plot::
+
+      import numpy as np
+      import matplotlib.pyplot as plt
+      import astropy.units as u
+
+      from dust_attenuation.WG00 import WG00
+
+      fig, ax = plt.subplots()
+
+      # generate the curves and plot them
+      ix = np.arange(1.0/3.0,1.0/0.1,0.1)/u.micron
+      x = 1./ix
+
+      # defined for normalization
+      x_Vband = 0.55
+
+      att_model = WG00(tau_V=0.25)
+      att_model.get_model(geometry = 'shell', dust_type = 'mw',
+                         dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label=r'$\tau(V) = 0.25$')
+
+      att_model = WG00(tau_V=1.0)
+      att_model.get_model(geometry = 'shell', dust_type = 'mw',
+                         dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label=r'$\tau(V) = 1.0$')
+
+      att_model = WG00(tau_V=5.0)
+      att_model.get_model(geometry = 'shell', dust_type = 'mw',
+                         dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label=r'$\tau(V) = 5.0$')
+
+      att_model = WG00(tau_V=50.0)
+      att_model.get_model(geometry = 'shell', dust_type = 'mw',
+                         dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label=r'$\tau(V) = 50.0$')
+
+      ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+      ax.set_ylabel(r'$Att(\lambda)/Att(V)$')
+
+      ax.set_xscale('log')
+      ax.set_xlim(0.09,4.0)
+
+      ax.set_title('WG00 Shell, clumpy, MW')
+
+      ax.legend(loc='best')
+      plt.tight_layout()
+      plt.show()
+
+Example `WG00` models showing shape variation with different types of
+dust grains.
+
+.. plot::
+
+      import numpy as np
+      import matplotlib.pyplot as plt
+      import astropy.units as u
+
+      from dust_attenuation.WG00 import WG00
+
+      fig, ax = plt.subplots()
+
+      # generate the curves and plot them
+      ix = np.arange(1.0/3.0,1.0/0.1,0.1)/u.micron
+      x = 1./ix
+
+      # defined for normalization
+      x_Vband = 0.55
+
+      att_model = WG00(tau_V=0.25)
+      att_model.get_model(geometry = 'shell', dust_type = 'mw',
+                          dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label='MW')
+
+      att_model = WG00(tau_V=1.0)
+      att_model.get_model(geometry = 'shell', dust_type = 'smc',
+                          dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label='SMC')
+
+      ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+      ax.set_ylabel(r'$Att(\lambda)/Att(V)$')
+
+      ax.set_xscale('log')
+      ax.set_xlim(0.09,4.0)
+
+      ax.set_title(r'WG00 Shell, clumpy, $\tau(V) = 1.0$')
+
+      ax.legend(loc='best')
+      plt.tight_layout()
+      plt.show()
+
+
+Example `WG00` models showing shape variation with different spherical galactic
+environments.
+
+.. plot::
+
+      import numpy as np
+      import matplotlib.pyplot as plt
+      import astropy.units as u
+
+      from dust_attenuation.WG00 import WG00
+
+      fig, ax = plt.subplots()
+
+      # generate the curves and plot them
+      ix = np.arange(1.0/3.0,1.0/0.1,0.1)/u.micron
+      x = 1./ix
+
+      # defined for normalization
+      x_Vband = 0.55
+
+      att_model = WG00(tau_V=0.25)
+      att_model.get_model(geometry = 'shell', dust_type = 'mw',
+                         dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label='Shell')
+
+      att_model = WG00(tau_V=1.0)
+      att_model.get_model(geometry = 'dusty', dust_type = 'mw',
+                         dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label='Dusty')
+
+      att_model = WG00(tau_V=1.0)
+      att_model.get_model(geometry = 'cloudy', dust_type = 'mw',
+                         dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label='Cloudy')
+
+      ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+      ax.set_ylabel(r'$Att(\lambda)/Att(V)$')
+
+      ax.set_xscale('log')
+      ax.set_xlim(0.09,4.0)
+
+      ax.set_title(r'WG00, clumpy, $\tau(V) = 1.0$')
+
+      ax.legend(loc='best')
+      plt.tight_layout()
+      plt.show()
+
+Example `WG00` models showing shape variation with local dust distributions.
+
+.. plot::
+
+      import numpy as np
+      import matplotlib.pyplot as plt
+      import astropy.units as u
+
+      from dust_attenuation.WG00 import WG00
+
+      fig, ax = plt.subplots()
+
+      # generate the curves and plot them
+      ix = np.arange(1.0/3.0,1.0/0.1,0.1)/u.micron
+      x = 1./ix
+
+      # defined for normalization
+      x_Vband = 0.55
+
+      att_model = WG00(tau_V=0.25)
+      att_model.get_model(geometry = 'shell', dust_type = 'mw',
+                         dust_distribution = 'homogeneous')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label='homogeneous')
+
+      att_model = WG00(tau_V=1.0)
+      att_model.get_model(geometry = 'dusty', dust_type = 'mw',
+                         dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label='clumpy')
+
+      ax.set_xlabel(r'$\lambda$ [$\mu m$]')
+      ax.set_ylabel(r'$Att(\lambda)/Att(V)$')
+
+      ax.set_xscale('log')
+      ax.set_xlim(0.09,4.0)
+
+      ax.set_title(r'WG00, Shell, $\tau(V) = 1.0$')
+
+      ax.legend(loc='best')
+      plt.tight_layout()
+      plt.show()
 
 Shape fitting models
 ====================
 
-   These models allow for more arbitrary shapes to be modeled than the
-   other model flavors.
+These models allow for more arbitrary shapes to be modeled than the
+other model flavors.
 
-   Noll.
-   Charlot & Fall.
-   Others.
+Noll.
+Charlot & Fall.
+Others.

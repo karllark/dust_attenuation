@@ -11,8 +11,8 @@ is chosen, and the fit performed.
 Example: C00 Fit
 ================
 
-In this example, we create some artificial curve with the C00 model
-and explain how to fit an attenuation curve with it.
+In this example, a mock attenuation curve (C00 model with noise)
+is fitted with the C00 model.
 
 .. plot::
     :include-source:
@@ -25,17 +25,17 @@ and explain how to fit an attenuation curve with it.
 
     from dust_attenuation.C00 import C00
 
-    # Create artificial attenuation curve with C00 and Av = 1.3 mag
+    # Create mock attenuation curve with C00 and Av = 1.3 mag
     # Better sampling using wavenumbers
-    x = np.arange(0.5,8.0,0.1)/u.micron
+    x = np.arange(0.5, 8.0, 0.1)/u.micron
     # Convert to microns
-    x=1/x
+    x = 1/x
 
     att_model = C00(Av=1.3)
     y = att_model(x)
     # add some noise
     noise = np.random.normal(0, 0.2, y.shape)
-    y+=noise
+    y += noise
 
     # initialize the model
     c00_init = C00()
@@ -56,7 +56,7 @@ and explain how to fit an attenuation curve with it.
     ax.plot(1/x.value, c00_fit(x.value), label='Fitted model')
 
     ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-    ax.set_ylabel('$Ax $')
+    ax.set_ylabel('$A(x)$')
 
     ax.set_title('Example C00 Fit ')
 
@@ -70,12 +70,10 @@ Example: Use WG00 to fit C00
 ============================
 
 In this example, we are using the WG00 attenuation curves to
-fit the original Calzetti attenuation curve with Av = 1 mag,
-i.e. similar to the normalised attenuation curve.
-The 2 configurations best fittind the C00 curves are for a SMC
-in either a SHELL geometry with clumpy dust distribution or a
+fit the Calzetti attenuation curve (C00 model) with Av = 1 mag and noise.
+The two WGOO configurations that best fit both have SMC-type dust and are
+the SHELL geometry with clumpy dust distribution and the
 DUSTY geometry with homogeneous dust distribution.
-
 
 .. plot::
     :include-source:
@@ -88,16 +86,13 @@ DUSTY geometry with homogeneous dust distribution.
     from dust_attenuation.C00 import C00
     from dust_attenuation.WG00 import WG00
 
-    # Generate the C00 curve with Av = 1mag and add some noise
-    x = np.arange(1/2,1/0.15,0.1)/u.micron
-    x=1/x
+    # Generate the C00 curve with Av = 1 mag and add some noise
+    x = np.arange(1/2, 1/0.15, 0.1)/u.micron
+    x= 1/x
     att_model = C00(Av=1)
     y = att_model(x)
     noise = np.random.normal(0, 0.05, y.shape)
-    y+=noise
-
-    # Convert A_lambda to tau_lambda
-    y /= 1.086
+    y += noise
 
     # Wavelength of V band
     x_Vband = 0.55
@@ -113,9 +108,10 @@ DUSTY geometry with homogeneous dust distribution.
     fit = LevMarLSQFitter()
 
     # plot the observed data, initial guess, and final fit
-    plt.figure(figsize=(15,9))
+    plt.figure(figsize=(15, 9))
 
-    plt.plot(1/x, y, 'ko', label='C00')
+    plt.plot(1/x, y, 'ko', label='C00 w/ Att(V) = 1', markersize=12,
+             fillstyle='none', markeredgewidth=2)
 
     # Loop over the different configurations
     for geo in geometries:
@@ -134,26 +130,31 @@ DUSTY geometry with homogeneous dust distribution.
                 if distrib == 'homogeneous': ls = '--'
                 if distrib == 'clumpy':  ls = '-'
 
-
                 WG00_init.get_model(geometry = geo,
                                     dust_type = dust,
                                     dust_distribution = distrib)
 
-
-                # fit the data to the FM90 model using the fitter
+                # fit the data to the WG00 model using the fitter
                 #   use the initialized model as the starting point
                 WG00_fit = fit(WG00_init, x.value, y)
 
-                plt.plot(1/x.value, WG00_fit(x.value) / WG00_fit(x_Vband),
+                # add best fitting Att(V) value to label
+                #   since the C00 model is in Att units, then best fit
+                #   tau_V value will actually be Att(V)
+                label = '%s; A(V) = %d.3' % (label, WG00_fit.tau_V.value)
+
+                plt.plot(1/x.value, WG00_fit(x.value),
                          label = label, ls = ls, lw = 2, color = color,
                          marker = marker, markevery = 10, markersize = 8 )
 
 
-    plt.xlabel('$x$ [$\mu m^{-1}$]',size=16)
-    plt.ylabel(r'$\tau / \tau_V $',size=16)
+    plt.xlabel('$x$ [$\mu m^{-1}$]', size=16)
+    plt.ylabel(r'$Att(x)$', size=16)
 
-    plt.title('Example: fit C00 with WG00', size =20)
+    plt.ylim(-0.1, 4.0)
+
+    plt.title('Example: fit C00 with WG00', size=20)
     plt.tick_params(labelsize=15)
-    plt.legend(loc='upper left',fontsize=18)
+    plt.legend(loc='upper left', fontsize=18, ncol=2)
     plt.tight_layout()
     plt.show()
