@@ -43,7 +43,7 @@ class WG00(BaseAtttauVModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_attenuation.WG00 import WG00
+        from dust_attenuation.radiative_transfer import WG00
 
         fig, ax = plt.subplots(1,2, figsize=(10,6))
 
