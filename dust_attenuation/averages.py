@@ -38,7 +38,7 @@ class C00(BaseAttAvModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_attenuation.C00 import C00
+        from dust_attenuation.averages import C00
 
         fig, ax = plt.subplots()
 
