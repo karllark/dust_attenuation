@@ -4,11 +4,11 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..C00 import C00
+from ..averages import C00
 from .helpers import _invalid_x_range
 
 
-@pytest.mark.parametrize("Av_invalid", [-1.0, -0.00001,-10])
+@pytest.mark.parametrize("Av_invalid", [-1.0, -0.00001, -10])
 def test_invalid_Av_input(Av_invalid):
     with pytest.raises(InputParameterError) as exc:
         tmodel = C00(Av=Av_invalid)

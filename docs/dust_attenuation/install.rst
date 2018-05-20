@@ -5,7 +5,7 @@ How to Install
 From source
 ===========
 
-``dust_extinction`` can be installed from the source code in the normal
+``dust_attenuation`` can be installed from the source code in the normal
 python fashion after downloading it from the git repo::
 
     python setup.py install

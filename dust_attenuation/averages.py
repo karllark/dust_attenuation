@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-# Main module for dust_attenuation
-
 
 import numpy as np
 import astropy.units as u
 
-from .base_classes import BaseAttAvModel, _test_valid_x_range
-
-from astropy.modeling import (Model, Fittable1DModel,
-                              Parameter, InputParameterError)
-
+from .base_classes import (BaseAttAvModel, _test_valid_x_range)
 
 __all__ = ['C00']
 
@@ -61,12 +55,9 @@ class C00(BaseAttAvModel):
 
         ax.legend(loc='best')
         plt.show()
-
-
     """
 
     x_range = x_range_C00
-
 
     @staticmethod
     def evaluate(x, Av):
@@ -83,8 +74,8 @@ class C00(BaseAttAvModel):
 
         Returns
         -------
-        ax: np array (float)
-            A(x) attenuation curve [mag]
+        att: np array (float)
+            Att(x) attenuation curve [mag]
 
         Raises
         ------
@@ -111,14 +102,13 @@ class C00(BaseAttAvModel):
         Rv = 4.05
 
         # define the ranges
-        uv2vis_indxs = np.where(np.logical_and(0.12 <= x, x < 0.63 ))
-        nir_indxs = np.where(np.logical_and( 0.63 <= x, x < 2.2 ))
+        uv2vis_indxs = np.where(np.logical_and(0.12 <= x, x < 0.63))
+        nir_indxs = np.where(np.logical_and(0.63 <= x, x < 2.2))
 
-
-        axEbv[uv2vis_indxs] = 2.659 * (-2.156 +
-                               1.509 * 1 / x[uv2vis_indxs] -
-                               0.198 * 1 / x[uv2vis_indxs] ** 2 +
-                               0.011 * 1 / x[uv2vis_indxs] ** 3) + Rv
+        axEbv[uv2vis_indxs] = (2.659 * (-2.156 +
+                                        1.509 * 1 / x[uv2vis_indxs] -
+                                        0.198 * 1 / x[uv2vis_indxs] ** 2 +
+                                        0.011 * 1 / x[uv2vis_indxs] ** 3) + Rv)
 
         axEbv[nir_indxs] = 2.659 * (-1.857 + 1.040 * 1 / x[nir_indxs]) + Rv
 

@@ -23,7 +23,7 @@ is fitted with the C00 model.
     from astropy.modeling.fitting import LevMarLSQFitter
     import astropy.units as u
 
-    from dust_attenuation.C00 import C00
+    from dust_attenuation.averages import C00
 
     # Create mock attenuation curve with C00 and Av = 1.3 mag
     # Better sampling using wavenumbers
@@ -53,7 +53,8 @@ is fitted with the C00 model.
 
     ax.plot(1/x, y, 'ko', label='Observed Curve')
     ax.plot(1/x.value, c00_init(x.value), label='Initial guess')
-    ax.plot(1/x.value, c00_fit(x.value), label='Fitted model')
+    ax.plot(1/x.value, c00_fit(x.value),
+            label='Fitted model; Att(V) = %.2f' % (c00_fit.Av.value))
 
     ax.set_xlabel('$x$ [$\mu m^{-1}$]')
     ax.set_ylabel('$A(x)$')
@@ -70,10 +71,12 @@ Example: Use WG00 to fit C00
 ============================
 
 In this example, we are using the WG00 attenuation curves to
-fit the Calzetti attenuation curve (C00 model) with Av = 1 mag and noise.
+fit the Calzetti attenuation curve (C00 model) with Att(V) = 1 mag and noise.
 The two WGOO configurations that best fit both have SMC-type dust and are
 the SHELL geometry with clumpy dust distribution and the
 DUSTY geometry with homogeneous dust distribution.
+The best fit values of the amount of dust in the system are given as the
+model radial A(V) values.
 
 .. plot::
     :include-source:
@@ -83,8 +86,8 @@ DUSTY geometry with homogeneous dust distribution.
     from astropy.modeling.fitting import LevMarLSQFitter
     import astropy.units as u
 
-    from dust_attenuation.C00 import C00
-    from dust_attenuation.WG00 import WG00
+    from dust_attenuation.averages import C00
+    from dust_attenuation.radiative_transfer import WG00
 
     # Generate the C00 curve with Av = 1 mag and add some noise
     x = np.arange(1/2, 1/0.15, 0.1)/u.micron
@@ -141,7 +144,7 @@ DUSTY geometry with homogeneous dust distribution.
                 # add best fitting Att(V) value to label
                 #   since the C00 model is in Att units, then best fit
                 #   tau_V value will actually be Att(V)
-                label = '%s; A(V) = %d.3' % (label, WG00_fit.tau_V.value)
+                label = '%s; A(V) = %.2f' % (label, WG00_fit.tau_V.value)
 
                 plt.plot(1/x.value, WG00_fit(x.value),
                          label = label, ls = ls, lw = 2, color = color,
@@ -158,3 +161,8 @@ DUSTY geometry with homogeneous dust distribution.
     plt.legend(loc='upper left', fontsize=18, ncol=2)
     plt.tight_layout()
     plt.show()
+
+More Examples
+=============
+
+TBA.

@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
-# Main module for dust_attenuation
 
 
 import numpy as np
-import astropy.units as u
 
-from astropy.modeling import (Model, Fittable1DModel,
-                              Parameter, InputParameterError)
+from astropy.modeling import (Fittable1DModel,
+                              Parameter,
+                              InputParameterError)
 
-
-__all__ = ['C00']
-
-x_range_C00 = [0.12, 2.2]
 
 def _test_valid_x_range(x, x_range, outname):
     """
@@ -37,6 +32,7 @@ def _test_valid_x_range(x, x_range, outname):
                          + str(x_range[1])
                          + ', x has units micron]')
 
+
 class BaseAttModel(Fittable1DModel):
     """
     Base Attenuation Model.  Do not use.
@@ -44,7 +40,7 @@ class BaseAttModel(Fittable1DModel):
     inputs = ('x',)
     outputs = ('axav',)
 
-    def attenuated(self, x, Av=None, Ebv=None):
+    def attenuate(self, x, Av=None, Ebv=None):
         """
         Calculate the attenuation as a fraction
 
@@ -116,7 +112,7 @@ class BaseAtttauVModel(BaseAttModel):
     Base attenuation tau_V Model.  Do not use.
     """
     tau_V = Parameter(description="tau_V: optical depth in V band ",
-                   default=1.0, min=0.25, max=50.00)
+                      default=1.0, min=0.25, max=50.00)
 
     @tau_V.validator
     def tau_V(self, value):
