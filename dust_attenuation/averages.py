@@ -3,7 +3,8 @@
 import numpy as np
 import astropy.units as u
 
-from .base_classes import (BaseAttAvModel, _test_valid_x_range)
+from .baseclasses import BaseAttAvModel
+from .helpers import _test_valid_x_range
 
 __all__ = ['C00']
 

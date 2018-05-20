@@ -96,4 +96,4 @@ Reference API
 
 .. automodapi:: dust_attenuation.radiative_transfer
 
-.. automodapi:: dust_attenuation.base_classes
+.. automodapi:: dust_attenuation.baseclasses

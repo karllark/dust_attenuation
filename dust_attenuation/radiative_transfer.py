@@ -8,7 +8,8 @@ import pkg_resources
 from astropy.io import ascii
 from astropy.modeling.tabular import tabular_model
 
-from .base_classes import (BaseAtttauVModel, _test_valid_x_range)
+from .baseclasses import BaseAtttauVModel
+from .helpers import _test_valid_x_range
 
 
 __all__ = ['WG00']
