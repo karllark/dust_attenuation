@@ -38,7 +38,7 @@ Contributions welcome (see below).
 
 Contributors
 ------------
-Karl Gordon (and hopefully soon others)
+Karl Gordon, David Corre
 
 Contributing
 ------------
