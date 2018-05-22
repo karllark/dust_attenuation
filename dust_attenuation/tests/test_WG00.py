@@ -4,11 +4,11 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..WG00 import WG00
+from ..radiative_transfer import WG00
 from .helpers import _invalid_x_range
 
 
-@pytest.mark.parametrize("tau_V_invalid", [-1.0, 0.2,100])
+@pytest.mark.parametrize("tau_V_invalid", [-1.0, 0.2, 100])
 def test_invalid_tau_v_input(tau_V_invalid):
     with pytest.raises(InputParameterError) as exc:
         tmodel = WG00(tau_V=tau_V_invalid)

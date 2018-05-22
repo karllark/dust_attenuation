@@ -27,7 +27,7 @@ Infrared Space Observatory (ISO) far-infrared photometry
       import matplotlib.pyplot as plt
       import astropy.units as u
 
-      from dust_attenuation.C00 import C00
+      from dust_attenuation.averages import C00
 
       fig, ax = plt.subplots()
 
@@ -72,7 +72,7 @@ Example `WG00` models showing variation in shape with amount of dust.
       import matplotlib.pyplot as plt
       import astropy.units as u
 
-      from dust_attenuation.WG00 import WG00
+      from dust_attenuation.radiative_transfer import WG00
 
       fig, ax = plt.subplots()
 
@@ -124,7 +124,7 @@ dust grains.
       import matplotlib.pyplot as plt
       import astropy.units as u
 
-      from dust_attenuation.WG00 import WG00
+      from dust_attenuation.radiative_transfer import WG00
 
       fig, ax = plt.subplots()
 
@@ -167,7 +167,7 @@ environments.
       import matplotlib.pyplot as plt
       import astropy.units as u
 
-      from dust_attenuation.WG00 import WG00
+      from dust_attenuation.radiative_transfer import WG00
 
       fig, ax = plt.subplots()
 
@@ -213,7 +213,7 @@ Example `WG00` models showing shape variation with local dust distributions.
       import matplotlib.pyplot as plt
       import astropy.units as u
 
-      from dust_attenuation.WG00 import WG00
+      from dust_attenuation.radiative_transfer import WG00
 
       fig, ax = plt.subplots()
 

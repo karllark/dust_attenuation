@@ -92,6 +92,8 @@ contributors page on Github
 Reference API
 =============
 
-.. automodapi:: dust_attenuation.C00
+.. automodapi:: dust_attenuation.averages
 
-.. automodapi:: dust_attenuation.WG00
+.. automodapi:: dust_attenuation.radiative_transfer
+
+.. automodapi:: dust_attenuation.baseclasses

@@ -9,6 +9,8 @@ type of attenuation, type of galaxy, or some other property.
 Average Models
 ==============
 
+Radiative Transfer Models
+=========================
 
 
 Shape Models

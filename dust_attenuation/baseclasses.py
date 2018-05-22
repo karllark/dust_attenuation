@@ -1,41 +1,12 @@
 # -*- coding: utf-8 -*-
-# Main module for dust_attenuation
-
-
 import numpy as np
-import astropy.units as u
 
-from astropy.modeling import (Model, Fittable1DModel,
-                              Parameter, InputParameterError)
+from astropy.modeling import (Fittable1DModel,
+                              Parameter,
+                              InputParameterError)
 
+__all__ = ['BaseAttModel', 'BaseAttAvModel', 'BaseAtttauVModel']
 
-__all__ = ['C00']
-
-x_range_C00 = [0.12, 2.2]
-
-def _test_valid_x_range(x, x_range, outname):
-    """
-    Test if any of the x values are outside of the valid range
-
-    Parameters
-    ----------
-    x : float array
-       wavelength in microns
-
-    x_range: 2 floats
-       allowed min/max of x
-
-    outname: str
-       name of curve for error message
-    """
-    if np.logical_or(np.any(x < x_range[0]),
-                     np.any(x > x_range[1])):
-        raise ValueError('Input x outside of range defined for ' + outname
-                         + ' ['
-                         + str(x_range[0])
-                         + ' <= x <= '
-                         + str(x_range[1])
-                         + ', x has units micron]')
 
 class BaseAttModel(Fittable1DModel):
     """
@@ -44,7 +15,7 @@ class BaseAttModel(Fittable1DModel):
     inputs = ('x',)
     outputs = ('axav',)
 
-    def attenuated(self, x, Av=None, Ebv=None):
+    def attenuate(self, x, Av=None, Ebv=None):
         """
         Calculate the attenuation as a fraction
 
@@ -116,7 +87,7 @@ class BaseAtttauVModel(BaseAttModel):
     Base attenuation tau_V Model.  Do not use.
     """
     tau_V = Parameter(description="tau_V: optical depth in V band ",
-                   default=1.0, min=0.25, max=50.00)
+                      default=1.0, min=0.25, max=50.00)
 
     @tau_V.validator
     def tau_V(self, value):
