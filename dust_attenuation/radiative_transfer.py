@@ -106,7 +106,6 @@ class WG00(BaseAtttauVModel):
             Att(x) attenuation curve [mag]
 
         """
-
         # Ensure strings are lower cases
         geometry = geometry.lower()
         dust_type = dust_type.lower()
@@ -144,7 +143,7 @@ class WG00(BaseAtttauVModel):
         wvl = np.array(data['lambda'][0:25])
 
         # Grid for the optical depth
-        tau_V = np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5,
+        tau_V_grid = np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5,
                           4.0, 4.5, 5.0, 5.5, 6.0, 7.0, 8.0, 9.0, 10.0,
                           15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0])
 
@@ -152,13 +151,14 @@ class WG00(BaseAtttauVModel):
         tab = tabular_model(2, name = 'Tabular_WG00')
 
         # Values corresponding to the x and y grid points
-        gridpoints = (wvl, tau_V)
+        gridpoints = (wvl, tau_V_grid)
+
 
         self.model = tab(gridpoints, lookup_table=data_table,
                          name='2D_table_WG00', bounds_error=False,
                          fill_value=None, method='linear')
 
-        super().__init__()
+        super().__init__(tau_V = tau_V)
 
     def evaluate(self, x, tau_V):
         """
@@ -196,7 +196,7 @@ class WG00(BaseAtttauVModel):
 
         # setup the ax vectors
         n_x = len(x)
-
+        
         xinterp = 1e4 * x
         yinterp = tau_V * np.ones(n_x)
 
