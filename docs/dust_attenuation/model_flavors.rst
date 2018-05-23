@@ -83,25 +83,21 @@ Example `WG00` models showing variation in shape with amount of dust.
       # defined for normalization
       x_Vband = 0.55
 
-      att_model = WG00(tau_V=0.25)
-      att_model.get_model(geometry = 'shell', dust_type = 'mw',
-                         dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label=r'$\tau(V) = 0.25$')
+      att_model = WG00(tau_V = 0.25, geometry = 'shell',
+                       dust_type = 'mw', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband), label = r'$\tau(V) = 0.25$')
 
-      att_model = WG00(tau_V=1.0)
-      att_model.get_model(geometry = 'shell', dust_type = 'mw',
-                         dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label=r'$\tau(V) = 1.0$')
+      att_model = WG00(tau_V = 1.0, geometry = 'shell',
+                       dust_type = 'mw', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband), label = r'$\tau(V) = 1.0$')
 
-      att_model = WG00(tau_V=5.0)
-      att_model.get_model(geometry = 'shell', dust_type = 'mw',
-                         dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label=r'$\tau(V) = 5.0$')
+      att_model = WG00(tau_V = 5.0, geometry = 'shell',
+                       dust_type = 'mw', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband), label = r'$\tau(V) = 5.0$')
 
-      att_model = WG00(tau_V=50.0)
-      att_model.get_model(geometry = 'shell', dust_type = 'mw',
-                         dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label=r'$\tau(V) = 50.0$')
+      att_model = WG00(tau_V = 50.0, geometry = 'shell',
+                       dust_type = 'mw', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband), label = r'$\tau(V) = 50.0$')
 
       ax.set_xlabel(r'$\lambda$ [$\mu m$]')
       ax.set_ylabel(r'$Att(\lambda)/Att(V)$')
@@ -135,15 +131,13 @@ dust grains.
       # defined for normalization
       x_Vband = 0.55
 
-      att_model = WG00(tau_V=0.25)
-      att_model.get_model(geometry = 'shell', dust_type = 'mw',
-                          dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label='MW')
+      att_model = WG00(tau_V = 0.25, geometry = 'shell',
+                       dust_type = 'mw', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband), label = 'MW')
 
-      att_model = WG00(tau_V=1.0)
-      att_model.get_model(geometry = 'shell', dust_type = 'smc',
-                          dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label='SMC')
+      att_model = WG00(tau_V = 1.0, geometry = 'shell',
+                       dust_type = 'smc', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband), label = 'SMC')
 
       ax.set_xlabel(r'$\lambda$ [$\mu m$]')
       ax.set_ylabel(r'$Att(\lambda)/Att(V)$')
@@ -178,20 +172,17 @@ environments.
       # defined for normalization
       x_Vband = 0.55
 
-      att_model = WG00(tau_V=0.25)
-      att_model.get_model(geometry = 'shell', dust_type = 'mw',
-                         dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label='Shell')
+      att_model = WG00(tau_V = 0.25, geometry = 'shell',
+                       dust_type = 'mw', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband), label = 'Shell')
 
-      att_model = WG00(tau_V=1.0)
-      att_model.get_model(geometry = 'dusty', dust_type = 'mw',
-                         dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label='Dusty')
+      att_model = WG00(tau_V = 1.0, geometry = 'dusty',
+                       dust_type = 'mw', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband), label = 'Dusty')
 
-      att_model = WG00(tau_V=1.0)
-      att_model.get_model(geometry = 'cloudy', dust_type = 'mw',
-                         dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label='Cloudy')
+      att_model = WG00(tau_V = 1.0, geometry = 'cloudy',
+                       dust_type = 'mw', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband), label = 'Cloudy')
 
       ax.set_xlabel(r'$\lambda$ [$\mu m$]')
       ax.set_ylabel(r'$Att(\lambda)/Att(V)$')
@@ -224,15 +215,13 @@ Example `WG00` models showing shape variation with local dust distributions.
       # defined for normalization
       x_Vband = 0.55
 
-      att_model = WG00(tau_V=0.25)
-      att_model.get_model(geometry = 'shell', dust_type = 'mw',
-                         dust_distribution = 'homogeneous')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label='homogeneous')
+      att_model = WG00(tau_V = 0.25, geometry = 'shell',
+                       dust_type = 'mw', dust_distribution = 'homogeneous')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label = 'homogeneous')
 
-      att_model = WG00(tau_V=1.0)
-      att_model.get_model(geometry = 'dusty', dust_type = 'mw',
-                         dust_distribution = 'clumpy')
-      ax.plot(x,att_model(x)/att_model(x_Vband),label='clumpy')
+      att_model = WG00(tau_V = 1.0, geometry = 'dusty',
+                       dust_type = 'mw', dust_distribution = 'clumpy')
+      ax.plot(x,att_model(x)/att_model(x_Vband),label = 'clumpy')
 
       ax.set_xlabel(r'$\lambda$ [$\mu m$]')
       ax.set_ylabel(r'$Att(\lambda)/Att(V)$')
