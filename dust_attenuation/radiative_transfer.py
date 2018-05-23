@@ -56,17 +56,16 @@ class WG00(BaseAtttauVModel):
 
         tau_Vs = [0.25,0.4,1.1,17.0,46.0]
         for tau_V in tau_Vs[::-1]:
-           att_model = WG00(tau_V=tau_V)
-           att_model.get_model(geometry = 'cloudy', dust_type = 'mw',
-                               dust_distribution = 'clumpy')
+           att_model = WG00(tau_V = tau_V, geometry = 'cloudy',
+                            dust_type = 'mw', dust_distribution = 'clumpy')
            ax[0].plot(x,att_model(1/x),label=r'$\tau_V$ = %.2f mag' % (tau_V))
            ax[1].plot(x,att_model(1/x)/att_model(x_Vband),
                       label=r'$\tau_V$ = %.2f mag' % (tau_V))
 
         ax[0].set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax[0].set_ylabel(r'$\tau(x)$ [mag]')
+        ax[0].set_ylabel(r'$\Att(x)$ [mag]')
         ax[1].set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax[1].set_ylabel(r'$\tau(x)/\tau_V$')
+        ax[1].set_ylabel(r'$\Att(x)/\Att_V$')
 
 
         ax[0].legend(loc='best')
@@ -103,8 +102,8 @@ class WG00(BaseAtttauVModel):
 
         Returns
         -------
-        taux: np array (float)
-            tau(x) attenuation curves for all optical depth [mag]
+        Attx: np array (float)
+            Att(x) attenuation curve [mag]
 
         """
 
@@ -175,8 +174,8 @@ class WG00(BaseAtttauVModel):
 
         Returns
         -------
-        taux: np array (float)
-            tau(x) attenuation curve [mag]
+        Attx: np array (float)
+            Att(x) attenuation curve [mag]
 
         Raises
         ------
@@ -202,4 +201,8 @@ class WG00(BaseAtttauVModel):
         yinterp = tau_V * np.ones(n_x)
 
         taux = self.model(xinterp, yinterp)
-        return taux
+
+        # Convert optical depth to attenuation
+        Attx = 1.086 * taux
+
+        return Attx
