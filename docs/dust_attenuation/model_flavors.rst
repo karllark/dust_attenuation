@@ -32,16 +32,16 @@ Infrared Space Observatory (ISO) far-infrared photometry
       fig, ax = plt.subplots()
 
       # generate the curves and plot them
-      ix = np.arange(1.0/2.2, 1.0/0.12 ,0.1)/u.micron
+      ix = np.arange(1.0/2.2, 1.0/0.12 , 0.1)/u.micron
       x = 1/ix
-      att_model = C00(Av=1.0)
-      ax.plot(x,att_model(x),label='C00')
+      att_model = C00(Av = 1.0)
+      ax.plot(x,att_model(x), label = 'C00')
 
       ax.set_xlabel('$\lambda$ [$\mu m$]')
       ax.set_ylabel('$Att(\lambda)/Att(V)$')
 
       ax.set_xscale('log')
-      ax.set_xlim(0.1,3.0)
+      ax.set_xlim(0.1, 3.0)
 
       ax.legend(loc='best')
       plt.tight_layout()
@@ -131,7 +131,7 @@ dust grains.
       # defined for normalization
       x_Vband = 0.55
 
-      att_model = WG00(tau_V = 0.25, geometry = 'shell',
+      att_model = WG00(tau_V = 1.0, geometry = 'shell',
                        dust_type = 'mw', dust_distribution = 'clumpy')
       ax.plot(x,att_model(x)/att_model(x_Vband), label = 'MW')
 
@@ -172,7 +172,7 @@ environments.
       # defined for normalization
       x_Vband = 0.55
 
-      att_model = WG00(tau_V = 0.25, geometry = 'shell',
+      att_model = WG00(tau_V = 1.0, geometry = 'shell',
                        dust_type = 'mw', dust_distribution = 'clumpy')
       ax.plot(x,att_model(x)/att_model(x_Vband), label = 'Shell')
 
@@ -215,7 +215,7 @@ Example `WG00` models showing shape variation with local dust distributions.
       # defined for normalization
       x_Vband = 0.55
 
-      att_model = WG00(tau_V = 0.25, geometry = 'shell',
+      att_model = WG00(tau_V = 1.0, geometry = 'shell',
                        dust_type = 'mw', dust_distribution = 'homogeneous')
       ax.plot(x,att_model(x)/att_model(x_Vband),label = 'homogeneous')
 
