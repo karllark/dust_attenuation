@@ -81,14 +81,17 @@ class WG00(BaseAtttauVModel):
     tau_V_range = [0.25, 50.0]
     x_range = x_range_WG00
 
-    def get_model(self, geometry='dusty', dust_type='mw',
-                  dust_distribution='clumpy'):
+    def __init__(self, tau_V, geometry='dusty', dust_type='mw',
+                 dust_distribution='clumpy'):
         """
         Load the attenuation curves for a given geometry, dust type and
         dust distribution.
 
         Parameters
         ----------
+        tau_V: float
+           optical depth in V band   
+
         geometry: string
            'shell', 'cloudy' or 'dusty'
 
@@ -102,6 +105,7 @@ class WG00(BaseAtttauVModel):
         -------
         taux: np array (float)
             tau(x) attenuation curves for all optical depth [mag]
+
         """
 
         # Ensure strings are lower cases
@@ -112,7 +116,7 @@ class WG00(BaseAtttauVModel):
         data_path = pkg_resources.resource_filename('dust_attenuation',
                                                     'data/WG00/')
 
-        data = ascii.read(data_path+geometry+'.txt', header_start=0)
+        data=ascii.read(data_path+geometry+'.txt',header_start=0)
 
         if dust_type == 'mw':
             start = 0
@@ -126,8 +130,7 @@ class WG00(BaseAtttauVModel):
 
         data_list = []
         len_data = len(data['lambda'])
-
-        # number of lines between 2 models
+        # number of lines between 2 models
         steps = 25
 
         counter = start
@@ -135,26 +138,28 @@ class WG00(BaseAtttauVModel):
             data_list.append(np.array(data[column_name][counter:counter+steps]))
             counter += int(2*steps)
 
-        # Convert to np.array and take transpose to have (wvl, tau_V)
+        # Convert to np.array and take transpose to have (wvl, tau_V)
         data_table = np.array(data_list).T
 
         # wavelength grid. It is the same for all the models
         wvl = np.array(data['lambda'][0:25])
 
-        # Grid for the optical depth
+        # Grid for the optical depth
         tau_V = np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5,
                           4.0, 4.5, 5.0, 5.5, 6.0, 7.0, 8.0, 9.0, 10.0,
                           15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0])
 
-        # Create a 2D tabular model
-        tab = tabular_model(2, name='Tabular_WG00')
+        # Create a 2D tabular model
+        tab = tabular_model(2, name = 'Tabular_WG00')
 
-        # Values corresponding to the x and y grid points
+        # Values corresponding to the x and y grid points
         gridpoints = (wvl, tau_V)
 
         self.model = tab(gridpoints, lookup_table=data_table,
                          name='2D_table_WG00', bounds_error=False,
                          fill_value=None, method='linear')
+
+        super().__init__()
 
     def evaluate(self, x, tau_V):
         """
