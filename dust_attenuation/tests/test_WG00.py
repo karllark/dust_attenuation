@@ -37,26 +37,10 @@ def test_invalid_micron(x_invalid_micron):
 def test_invalid_micron(x_invalid_angstrom):
     _invalid_x_range(x_invalid_angstrom, WG00(tau_V=1), 'WG00')
 
-"""
-def test_axav_c00_table3():
-    # values from Table 3 of Cardelli et al. (1989)
-    #   ignoring the last value at L band as it is outside the
-    #   valid range for the relationship
-    #  updated for correction for incorrect value in the table for B band
-    #    correction from Geoff Clayton via email
-    #x = np.array([2.78, 2.27, 1.82, 1.43,
-    #              1.11, 0.80, 0.63, 0.46])
-    #cor_vals = np.array([1.569, 1.322, 1.000, 0.751,
-    #                     0.479, 0.282, 0.190, 0.114])
-
-    # initialize extinction model
-    #tmodel =  C00(Av=1)
-
-    # test (table in paper has limited precision)
-    #np.testing.assert_allclose(tmodel(x), cor_vals, atol=1e-2)
-"""
 
 def get_taux_cor_vals(tauV, geo, dust, distrib):
+    # correct values are taken from the publicly available tables
+    # of Witt & Gordon (2000, ApJ, Volume 528, pp. 799-816)
 
     # ensure parameters are lower cases
     geo = geo.lower()
@@ -413,49 +397,31 @@ def test_WG00_values(tauV, geometries, dust_types, dust_distribs):
     x, cor_vals = get_taux_cor_vals(tauV, geometries, dust_types,
                                     dust_distribs)
     # initialize extinction model
-    model = WG00(tauV, geometry = geometries, dust_type = dust_types,
-                 dust_distribution = dust_distribs)
+    tmodel = WG00(tauV, geometry = geometries, dust_type = dust_types,
+                  dust_distribution = dust_distribs)
 
     # test taux
-    np.testing.assert_allclose(model(x)/1.086, cor_vals, atol=1e-10)
-
-"""
-def test_extinguish_no_av_or_ebv():
-    tmodel = CCM89()
-    with pytest.raises(InputParameterError) as exc:
-        tmodel.extinguish([1.0])
-    assert exc.value.args[0] == 'neither Av or Ebv passed, one required'
+    np.testing.assert_allclose(tmodel(x), cor_vals*1.086, atol=1e-10)
 
 
-@pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
-def test_extinction_CCM89_extinguish_values_Av(Rv):
+@pytest.mark.parametrize("tauV", [0.25, 1.0, 10.0, 50.0])
+@pytest.mark.parametrize("geometries", ['shell', 'cloudy','dusty'])
+@pytest.mark.parametrize("dust_types", ['smc', 'mw'])
+@pytest.mark.parametrize("dust_distribs", ['homogeneous', 'clumpy'])
+def test_attenuation_WG00_attenuate_values(tauV, geometries, dust_types,
+                                               dust_distribs):
+
     # get the correct values
-    x, cor_vals = get_axav_cor_vals(Rv)
+    x, cor_vals = get_taux_cor_vals(tauV, geometries, dust_types,
+                                    dust_distribs)
 
     # calculate the cor_vals in fractional units
-    Av = 1.0
-    cor_vals = np.power(10.0, -0.4*(cor_vals*Av))
+    cor_vals = np.power(10.0, -0.4*(cor_vals*1.086))
 
     # initialize extinction model
-    tmodel = CCM89(Rv=Rv)
+    tmodel = WG00(tauV, geometry = geometries, dust_type = dust_types,
+                  dust_distribution = dust_distribs)
 
     # test
-    np.testing.assert_allclose(tmodel.extinguish(x, Av=Av), cor_vals)
+    np.testing.assert_allclose(tmodel.attenuate(x), cor_vals, atol=1e-10)
 
-
-@pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
-def test_extinction_CCM89_extinguish_values_Ebv(Rv):
-    # get the correct values
-    x, cor_vals = get_axav_cor_vals(Rv)
-
-    # calculate the cor_vals in fractional units
-    Ebv = 1.0
-    Av = Ebv*Rv
-    cor_vals = np.power(10.0, -0.4*(cor_vals*Av))
-
-    # initialize extinction model
-    tmodel = CCM89(Rv=Rv)
-
-    # test
-    np.testing.assert_allclose(tmodel.extinguish(x, Ebv=Ebv), cor_vals)
-"""
