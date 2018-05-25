@@ -37,127 +37,79 @@ def test_invalid_micron(x_invalid_micron):
 def test_invalid_micron(x_invalid_angstrom):
     _invalid_x_range(x_invalid_angstrom, C00(Av=1), 'C00')
 
-"""
-def test_axav_c00_table3():
-    # values from Table 3 of Cardelli et al. (1989)
-    #   ignoring the last value at L band as it is outside the
-    #   valid range for the relationship
-    #  updated for correction for incorrect value in the table for B band
-    #    correction from Geoff Clayton via email
-    #x = np.array([2.78, 2.27, 1.82, 1.43,
-    #              1.11, 0.80, 0.63, 0.46])
-    #cor_vals = np.array([1.569, 1.322, 1.000, 0.751,
-    #                     0.479, 0.282, 0.190, 0.114])
 
-    # initialize extinction model
-    #tmodel =  C00(Av=1)
-
-    # test (table in paper has limited precision)
-    #np.testing.assert_allclose(tmodel(x), cor_vals, atol=1e-2)
-
-
-def get_axav_cor_vals(Rv):
-    # testing wavenumbers
-    x = np.array([10., 9., 8., 7.,
-                  6., 5., 4.6, 4.,
-                  3., 2.78, 2.27, 1.82,
-                  1.43, 1.11, 0.8, 0.63,
-                  0.46])
+def get_axav_cor_vals(Av):
+    # testing wavenumbers. Validity range 0.12 - 2.2 microns, equation (4) 
+    # in Calzetti (2000, ApJ, Volume 533, Issue 2, pp. 682-695)
+    x = np.array([0.12, 0.22947368, 0.33894737, 0.44842105, 0.55789474,
+                  0.66736842, 0.77684211, 0.88631579, 0.99578947,
+                  1.10526316, 1.21473684, 1.32421053, 1.43368421, 1.54315789,
+                  1.65263158, 1.76210526,  1.87157895,  1.98105263, 
+                  2.09052632,  2.2])
 
     # add units
-    x = x/u.micron
+    x = x*u.micron
 
-    # correct values
-    if Rv == 3.1:
-        cor_vals = np.array([5.23835484, 4.13406452, 3.33685933, 2.77962453,
-                             2.52195399, 2.84252644, 3.18598916, 2.31531711,
-                             1.64254927, 1.56880904, 1.32257836, 1.,
-                             0.75125994, 0.47803460, 0.28206957, 0.19200814,
-                             0.11572348])
-    elif Rv == 2.0:
-        cor_vals = np.array([9.407, 7.3065, 5.76223881, 4.60825807,
-                             4.01559036, 4.43845534, 4.93952892, 3.39275574,
-                             2.068771, 1.9075018, 1.49999733, 1.,
-                             0.68650255, 0.36750326, 0.21678862, 0.14757062,
-                             0.08894094])
-    elif Rv == 3.0:
-        cor_vals = np.array([5.491, 4.32633333, 3.48385202, 2.8904508,
-                             2.6124774, 2.9392494, 3.2922643, 2.38061642,
-                             1.66838089, 1.58933588, 1.33333103, 1.,
-                             0.74733525, 0.47133573, 0.27811315, 0.18931496,
-                             0.11410029])
-    elif Rv == 4.0:
-        cor_vals = np.array([3.533, 2.83625, 2.34465863, 2.03154717,
-                             1.91092092, 2.18964643, 2.46863199, 1.87454675,
-                             1.46818583, 1.43025292, 1.24999788, 1.,
-                             0.7777516, 0.52325196, 0.30877542, 0.21018713,
-                             0.12667997])
-    elif Rv == 5.0:
-        cor_vals = np.array([2.3582, 1.9422, 1.66114259, 1.51620499,
-                             1.48998704, 1.73988465, 1.97445261, 1.57090496,
-                             1.3480688, 1.33480314, 1.19999799, 1.,
-                             0.79600141, 0.5544017, 0.32717278, 0.22271044,
-                             0.13422778])
-    elif Rv == 6.0:
-        cor_vals = np.array([1.575, 1.34616667,  1.20546523,  1.17264354,
-                             1.20936444, 1.44004346, 1.64499968, 1.36847709,
-                             1.26799077, 1.27116996, 1.16666472, 1.,
-                             0.80816794, 0.5751682, 0.33943769, 0.23105931,
-                             0.13925965])
+    # correct values generated using this code
+    if Av == 0.2:
+        cor_vals = np.array([0.59848769, 0.40617258, 0.31227495, 0.24549295,
+                             0.19684966, 0.16078594, 0.13194974, 0.11023698,
+                             0.09329826, 0.07971503, 0.06858008, 0.05928619,
+                             0.05141164, 0.04465435, 0.0387923, 0.03365862,
+                             0.02912551, 0.0250934, 0.02148359, 0.])
+    elif Av == 1.0:
+        cor_vals = np.array([2.99243843, 2.03086288, 1.56137474, 1.22746473,
+                             0.98424828, 0.80392969, 0.65974871, 0.55118488,
+                             0.46649132, 0.39857516, 0.34290038, 0.29643097,
+                             0.25705821, 0.22327176, 0.19396148, 0.1682931,
+                             0.14562754, 0.125467, 0.10741794, 0.])
+    elif Av == 2.4:
+        cor_vals = np.array([7.18185222, 4.8740709, 3.74729937, 2.94591535,
+                             2.36219588, 1.92943125, 1.58339689, 1.32284371,
+                             1.11957917, 0.95658037, 0.82296091, 0.71143433,
+                             0.6169397, 0.53585223, 0.46550756, 0.40390344,
+                             0.34950611, 0.3011208, 0.25780305, 0.])
+    elif Av == 5.0:
+        cor_vals = np.array([14.96219214, 10.15431438, 7.80687369, 6.13732365,
+                             4.92124141, 4.01964844, 3.29874353, 2.75592439,
+                             2.33245661, 1.99287578, 1.71450189, 1.48215485,
+                             1.28529105, 1.11635882, 0.96980742, 0.84146551,
+                             0.72813772, 0.62733501, 0.53708968, 0.])
+    elif Av == 10.0:
+        cor_vals = np.array([29.92438427, 20.30862876, 15.61374738,
+                             12.27464731, 9.84248281, 8.03929687, 6.59748706,
+                             5.51184878, 4.66491322, 3.98575156, 3.42900378,
+                             2.96430969, 2.5705821, 2.23271764, 1.93961483,
+                             1.68293101, 1.45627545, 1.25467002, 1.07417936,
+                             0.])
     else:
         cor_vals = np.array([0.0])
 
     return (x, cor_vals)
 
 
-@pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
-def test_extinction_CCM89_values(Rv):
+@pytest.mark.parametrize("Av", [0.2, 1.0, 2.4, 5.0, 10.0])
+def test_attenuation_C00_values(Av):
     # get the correct values
-    x, cor_vals = get_axav_cor_vals(Rv)
+    x, cor_vals = get_axav_cor_vals(Av)
 
     # initialize extinction model
-    tmodel = CCM89(Rv=Rv)
-
-    # test
-    np.testing.assert_allclose(tmodel(x), cor_vals)
-
-
-def test_extinguish_no_av_or_ebv():
-    tmodel = CCM89()
-    with pytest.raises(InputParameterError) as exc:
-        tmodel.extinguish([1.0])
-    assert exc.value.args[0] == 'neither Av or Ebv passed, one required'
+    tmodel = C00(Av=Av)
+    
+    # test. Needed to decreased atol to 1e-7 because of Av=0.2 case
+    np.testing.assert_allclose(tmodel(x), cor_vals,atol=1e-7)
 
 
-@pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
-def test_extinction_CCM89_extinguish_values_Av(Rv):
+@pytest.mark.parametrize("Av", [0.2, 1.0, 2.4, 5.0, 10.0])
+def test_attenuation_C00_attenuate_values_Av(Av):
     # get the correct values
-    x, cor_vals = get_axav_cor_vals(Rv)
+    x, cor_vals = get_axav_cor_vals(Av)
 
     # calculate the cor_vals in fractional units
-    Av = 1.0
-    cor_vals = np.power(10.0, -0.4*(cor_vals*Av))
+    cor_vals = np.power(10.0, -0.4*(cor_vals))
 
     # initialize extinction model
-    tmodel = CCM89(Rv=Rv)
+    tmodel = C00(Av=Av)
 
     # test
-    np.testing.assert_allclose(tmodel.extinguish(x, Av=Av), cor_vals)
-
-
-@pytest.mark.parametrize("Rv", [2.0, 3.0, 3.1, 4.0, 5.0, 6.0])
-def test_extinction_CCM89_extinguish_values_Ebv(Rv):
-    # get the correct values
-    x, cor_vals = get_axav_cor_vals(Rv)
-
-    # calculate the cor_vals in fractional units
-    Ebv = 1.0
-    Av = Ebv*Rv
-    cor_vals = np.power(10.0, -0.4*(cor_vals*Av))
-
-    # initialize extinction model
-    tmodel = CCM89(Rv=Rv)
-
-    # test
-    np.testing.assert_allclose(tmodel.extinguish(x, Ebv=Ebv), cor_vals)
-"""
+    np.testing.assert_allclose(tmodel.attenuate(x), cor_vals,atol=1e-10)
