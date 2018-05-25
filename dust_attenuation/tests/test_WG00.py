@@ -34,7 +34,7 @@ def test_invalid_micron(x_invalid_micron):
 
 @pytest.mark.parametrize("x_invalid_angstrom",
                          u.angstrom*1e4/[-1.0, 0.05, 10.1, 100.])
-def test_invalid_micron(x_invalid_angstrom):
+def test_invalid_angstrom(x_invalid_angstrom):
     _invalid_x_range(x_invalid_angstrom, WG00(tau_V=1), 'WG00')
 
 
@@ -50,7 +50,7 @@ def get_taux_cor_vals(tauV, geo, dust, distrib):
     # testing wavelengths
     x = np.array([1000., 1142., 1285., 1428., 1571., 1714., 1857., 2000.,
                   2142., 2285., 2428., 2571., 2714., 2857., 3000., 3776.,
-                  4754., 5985., 7535., 9487., 11943., 15036., 18929., 
+                  4754., 5985., 7535., 9487., 11943., 15036., 18929.,
                   23830., 30001])
 
     # add units
@@ -75,7 +75,7 @@ def get_taux_cor_vals(tauV, geo, dust, distrib):
                 elif tauV == 10.0:
                     cor_vals = np.array([95.924, 74.314, 60.329, 40.619,
                                          28.683, 26.403, 26.022, 23.075,
-                                         19.489, 19.894, 18.844, 18.153, 
+                                         19.489, 19.894, 18.844, 18.153,
                                          16.263, 15.311, 14.386, 11.601,
                                          8.842, 6.337, 4.525, 2.971, 1.849,
                                          1.103, 0.75, 0.514, 0.225])
@@ -212,7 +212,7 @@ def get_taux_cor_vals(tauV, geo, dust, distrib):
                                          1.865, 1.821, 1.791, 1.762, 1.741,
                                          1.718, 1.680, 1.663, 1.628, 1.612,
                                          1.543, 1.438, 1.306, 1.153, 0.957,
-                                         0.743, 0.530, 0.398, 0.293, 0.140 ])
+                                         0.743, 0.530, 0.398, 0.293, 0.140])
                 elif tauV == 50.0:
                     cor_vals = np.array([3.566, 3.281, 3.079, 2.911, 2.807,
                                          2.714, 2.640, 2.578, 2.530, 2.486,
@@ -239,13 +239,13 @@ def get_taux_cor_vals(tauV, geo, dust, distrib):
                     cor_vals = np.array([53.322, 31.335, 24.372, 19.092,
                                          17.299, 16.716, 18.468, 22.657,
                                          27.293, 22.778, 20.205, 15.946,
-                                         14.418, 13.263, 12.796, 10.948, 
+                                         14.418, 13.263, 12.796, 10.948,
                                          8.615, 6.564, 4.825, 3.015, 2.099,
                                          1.444, 0.986, 0.691, 0.485])
                 elif tauV == 50.0:
                     cor_vals = np.array([0.000, 0.000, 0.000, 0.000, 0.000,
                                          0.000, 0.000, 0.000, 0.000, 0.000,
-                                         0.000, 110.43, 100.063, 94.504, 
+                                         0.000, 110.43, 100.063, 94.504,
                                          90.384, 76.520, 59.569, 46.469,
                                          30.557, 17.523, 11.821, 8.239, 5.688,
                                          3.944, 2.73])
@@ -255,7 +255,7 @@ def get_taux_cor_vals(tauV, geo, dust, distrib):
                     cor_vals = np.array([0.813, 0.567, 0.421, 0.342, 0.310,
                                          0.306, 0.332, 0.412, 0.499, 0.449,
                                          0.360, 0.304, 0.273, 0.253, 0.239,
-                                         0.205, 0.160, 0.125, 0.093, 0.060, 
+                                         0.205, 0.160, 0.125, 0.093, 0.060,
                                          0.043, 0.031, 0.022, 0.015, 0.011])
                 elif tauV == 1.0:
                     cor_vals = np.array([2.036, 1.643, 1.336, 1.148, 1.066,
@@ -389,7 +389,7 @@ def get_taux_cor_vals(tauV, geo, dust, distrib):
 
 
 @pytest.mark.parametrize("tauV", [0.25, 1.0, 10.0, 50.0])
-@pytest.mark.parametrize("geometries", ['shell', 'cloudy','dusty'])
+@pytest.mark.parametrize("geometries", ['shell', 'cloudy', 'dusty'])
 @pytest.mark.parametrize("dust_types", ['smc', 'mw'])
 @pytest.mark.parametrize("dust_distribs", ['homogeneous', 'clumpy'])
 def test_WG00_values(tauV, geometries, dust_types, dust_distribs):
@@ -397,19 +397,19 @@ def test_WG00_values(tauV, geometries, dust_types, dust_distribs):
     x, cor_vals = get_taux_cor_vals(tauV, geometries, dust_types,
                                     dust_distribs)
     # initialize extinction model
-    tmodel = WG00(tauV, geometry = geometries, dust_type = dust_types,
-                  dust_distribution = dust_distribs)
+    tmodel = WG00(tauV, geometry=geometries, dust_type=dust_types,
+                  dust_distribution=dust_distribs)
 
     # test taux
     np.testing.assert_allclose(tmodel(x), cor_vals*1.086, atol=1e-10)
 
 
 @pytest.mark.parametrize("tauV", [0.25, 1.0, 10.0, 50.0])
-@pytest.mark.parametrize("geometries", ['shell', 'cloudy','dusty'])
+@pytest.mark.parametrize("geometries", ['shell', 'cloudy', 'dusty'])
 @pytest.mark.parametrize("dust_types", ['smc', 'mw'])
 @pytest.mark.parametrize("dust_distribs", ['homogeneous', 'clumpy'])
 def test_attenuation_WG00_attenuate_values(tauV, geometries, dust_types,
-                                               dust_distribs):
+                                           dust_distribs):
 
     # get the correct values
     x, cor_vals = get_taux_cor_vals(tauV, geometries, dust_types,
@@ -419,9 +419,8 @@ def test_attenuation_WG00_attenuate_values(tauV, geometries, dust_types,
     cor_vals = np.power(10.0, -0.4*(cor_vals*1.086))
 
     # initialize extinction model
-    tmodel = WG00(tauV, geometry = geometries, dust_type = dust_types,
-                  dust_distribution = dust_distribs)
+    tmodel = WG00(tauV, geometry=geometries, dust_type=dust_types,
+                  dust_distribution=dust_distribs)
 
     # test
     np.testing.assert_allclose(tmodel.attenuate(x), cor_vals, atol=1e-10)
-

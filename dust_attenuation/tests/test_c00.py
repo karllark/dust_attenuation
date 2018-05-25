@@ -34,17 +34,17 @@ def test_invalid_micron(x_invalid_micron):
 
 @pytest.mark.parametrize("x_invalid_angstrom",
                          u.angstrom*1e4/[-1.0, 0.1, 10.1, 100.])
-def test_invalid_micron(x_invalid_angstrom):
+def test_invalid_angstrom(x_invalid_angstrom):
     _invalid_x_range(x_invalid_angstrom, C00(Av=1), 'C00')
 
 
 def get_axav_cor_vals(Av):
-    # testing wavenumbers. Validity range 0.12 - 2.2 microns, equation (4) 
+    # testing wavenumbers. Validity range 0.12 - 2.2 microns, equation (4)
     # in Calzetti (2000, ApJ, Volume 533, Issue 2, pp. 682-695)
     x = np.array([0.12, 0.22947368, 0.33894737, 0.44842105, 0.55789474,
                   0.66736842, 0.77684211, 0.88631579, 0.99578947,
                   1.10526316, 1.21473684, 1.32421053, 1.43368421, 1.54315789,
-                  1.65263158, 1.76210526,  1.87157895,  1.98105263, 
+                  1.65263158, 1.76210526,  1.87157895,  1.98105263,
                   2.09052632,  2.2])
 
     # add units
@@ -95,9 +95,9 @@ def test_attenuation_C00_values(Av):
 
     # initialize extinction model
     tmodel = C00(Av=Av)
-    
+
     # test. Needed to decreased atol to 1e-7 because of Av=0.2 case
-    np.testing.assert_allclose(tmodel(x), cor_vals,atol=1e-7)
+    np.testing.assert_allclose(tmodel(x), cor_vals, atol=1e-7)
 
 
 @pytest.mark.parametrize("Av", [0.2, 1.0, 2.4, 5.0, 10.0])
@@ -112,4 +112,4 @@ def test_attenuation_C00_attenuate_values_Av(Av):
     tmodel = C00(Av=Av)
 
     # test
-    np.testing.assert_allclose(tmodel.attenuate(x), cor_vals,atol=1e-10)
+    np.testing.assert_allclose(tmodel.attenuate(x), cor_vals, atol=1e-10)
