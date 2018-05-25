@@ -63,9 +63,9 @@ class WG00(BaseAtttauVModel):
                       label=r'$\tau_V$ = %.2f mag' % (tau_V))
 
         ax[0].set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax[0].set_ylabel(r'$\Att(x)$ [mag]')
+        ax[0].set_ylabel(r'$Att(x)$ [mag]')
         ax[1].set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax[1].set_ylabel(r'$\Att(x)/\Att_V$')
+        ax[1].set_ylabel(r'$Att(x)/Att_V$')
 
 
         ax[0].legend(loc='best')
