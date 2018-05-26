@@ -13,9 +13,9 @@ class BaseAttModel(Fittable1DModel):
     Base Attenuation Model.  Do not use.
     """
     inputs = ('x',)
-    outputs = ('axav',)
+    outputs = ('ax',)
 
-    def attenuate(self, x, Av=None, Ebv=None):
+    def attenuate(self, x):
         """
         Calculate the attenuation as a fraction
 
@@ -27,32 +27,16 @@ class BaseAttModel(Fittable1DModel):
 
            internally microns are used
 
-        Av: float
-           A(V) value of dust column
-           Av or Ebv must be set
-
-        Ebv: float
-           E(B-V) value of dust column
-           Av or Ebv must be set
-
         Returns
         -------
         frac_att: np array (float)
            fractional attenuation as a function of x
         """
         # get the attenuation curve
-        axav = self(x)
-
-        # check that av or ebv is set
-        if (Av is None) and (Ebv is None):
-            raise InputParameterError('neither Av or Ebv passed, one required')
-
-        # if Av is not set and Ebv set, convert to Av
-        if Av is None:
-            Av = self.Rv*Ebv
+        ax = self(x)
 
         # return fractional attenuation
-        return np.power(10.0, -0.4*axav*Av)
+        return np.power(10.0, -0.4*ax)
 
 
 class BaseAttAvModel(BaseAttModel):

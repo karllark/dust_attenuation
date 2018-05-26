@@ -92,7 +92,7 @@ model radial A(V) values.
     # Generate the C00 curve with Av = 1 mag and add some noise
     x = np.arange(1/2, 1/0.15, 0.1)/u.micron
     x= 1/x
-    att_model = C00(Av=1)
+    att_model = C00(Av = 1)
     y = att_model(x)
     noise = np.random.normal(0, 0.05, y.shape)
     y += noise
@@ -103,9 +103,6 @@ model radial A(V) values.
     geometries = ['shell', 'cloudy', 'dusty']
     dust_types = ['MW', 'SMC']
     dust_distribs = ['homogeneous', 'clumpy']
-
-    # initialize the model
-    WG00_init = WG00(tau_V=2)
 
     # pick the fitter
     fit = LevMarLSQFitter()
@@ -132,10 +129,10 @@ model radial A(V) values.
 
                 if distrib == 'homogeneous': ls = '--'
                 if distrib == 'clumpy':  ls = '-'
-
-                WG00_init.get_model(geometry = geo,
-                                    dust_type = dust,
-                                    dust_distribution = distrib)
+                
+                WG00_init = WG00(tau_V = 2.0, geometry = geo,
+                                 dust_type = dust,
+                                 dust_distribution = distrib)
 
                 # fit the data to the WG00 model using the fitter
                 #   use the initialized model as the starting point
