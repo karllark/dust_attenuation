@@ -60,10 +60,72 @@ class C00(BaseAttAvModel):
 
     x_range = x_range_C00
 
-    @staticmethod
-    def evaluate(x, Av):
+    def __init__(self, Av):
+   
+        self.Rv = 4.05
+
+        # In Python 2: super(WG00, self) 
+        # In Python 3: super() but super(WG00, self) still works
+        super(C00, self).__init__(Av=Av)
+
+
+    def k_lambda(self, x):
+        """ Compute the starburst reddening curve of Calzetti et al. (2000)
+            k'(λ)=A(λ)/E(B-V)
+
+         Parameters
+         ----------
+         in_x: float
+            expects either x in units of wavelengths or frequency
+            or assumes wavelengths in [micron]
+
+            internally microns are used
+
+         Returns
+         -------
+         k_lambda: np array (float)
+             k_lambda(x) reddening curve
+ 
+         Raises
+         ------
+         ValueError
+            Input x values outside of defined range
+
         """
-        C00 function
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        with u.add_enabled_equivalencies(u.spectral()):
+            x_quant = u.Quantity(x, u.micron, dtype=np.float64)
+
+        # strip the quantity to avoid needing to add units to all the
+        #    polynomical coefficients
+        x = x_quant.value
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_C00, 'C00')
+
+        # setup the ax vectors
+        n_x = len(x)
+        axEbv = np.zeros(n_x)
+
+        # define the ranges
+        uv2vis_indxs = np.where(np.logical_and(0.12 <= x, x < 0.63))
+        nir_indxs = np.where(np.logical_and(0.63 <= x, x < 2.2))
+
+        axEbv[uv2vis_indxs] = (2.659 * (-2.156 +
+                                        1.509 * 1 / x[uv2vis_indxs] -
+                                        0.198 * 1 / x[uv2vis_indxs] ** 2 +
+                                        0.011 * 1 / x[uv2vis_indxs] ** 3) + self.Rv)
+
+        axEbv[nir_indxs] = 2.659 * (-1.857 + 1.040 * 1 / x[nir_indxs]) + self.Rv
+
+        return axEbv
+
+
+    def evaluate(self, x, Av):
+        """
+        Returns the attenuation curve, A(λ), following the recipe of 
+        Calzetti et al. (2000).
 
         Parameters
         ----------
@@ -95,24 +157,9 @@ class C00(BaseAttAvModel):
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_C00, 'C00')
 
-        # setup the ax vectors
-        n_x = len(x)
-        axEbv = np.zeros(n_x)
-
-        # Rv is fixed to 4.05
-        Rv = 4.05
-
-        # define the ranges
-        uv2vis_indxs = np.where(np.logical_and(0.12 <= x, x < 0.63))
-        nir_indxs = np.where(np.logical_and(0.63 <= x, x < 2.2))
-
-        axEbv[uv2vis_indxs] = (2.659 * (-2.156 +
-                                        1.509 * 1 / x[uv2vis_indxs] -
-                                        0.198 * 1 / x[uv2vis_indxs] ** 2 +
-                                        0.011 * 1 / x[uv2vis_indxs] ** 3) + Rv)
-
-        axEbv[nir_indxs] = 2.659 * (-1.857 + 1.040 * 1 / x[nir_indxs]) + Rv
-
-        ax = axEbv / Rv * Av
+        ax = self.k_lambda(x) / self.Rv * Av
 
         return ax
+
+
+  
