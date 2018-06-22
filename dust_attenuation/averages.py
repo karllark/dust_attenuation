@@ -6,9 +6,10 @@ import astropy.units as u
 from .baseclasses import BaseAttAvModel
 from .helpers import _test_valid_x_range
 
-__all__ = ['C00']
+__all__ = ['C00', 'Leitherer02']
 
 x_range_C00 = [0.12, 2.2]
+x_range_Leit02 = [0.097, 0.18]
 
 
 class C00(BaseAttAvModel):
@@ -64,8 +65,8 @@ class C00(BaseAttAvModel):
    
         self.Rv = 4.05
 
-        # In Python 2: super(WG00, self) 
-        # In Python 3: super() but super(WG00, self) still works
+        # In Python 2: super(C00, self) 
+        # In Python 3: super() but super(C00, self) still works
         super(C00, self).__init__(Av=Av)
 
 
@@ -162,4 +163,143 @@ class C00(BaseAttAvModel):
         return ax
 
 
-  
+class Leitherer02(BaseAttAvModel):
+    """
+    Attenuation curve of Leitherer et al. (2002).
+    Narrow validity range: 0.097 to 0.18 microns
+
+    Parameters
+    ----------
+    Av: float
+        attenuation in V band
+
+    Raises
+    ------
+    InputParameterError
+       Input Av values outside of defined range
+
+    Notes
+    -----
+
+    From Leitherer (2002, ApJS, Volume 140, Issue 2, pp. 303-329)
+
+    Example:
+
+    .. plot::
+        :include-source:
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import astropy.units as u
+
+        from dust_attenuation.averages import Leitherer02
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(0.12,2.2,0.1)*u.micron
+
+        Avs = [0.1,0.5,1.0,2.0,5.0]
+        for cur_Av in Avs:
+           att_model = Leitherer(Av=cur_Av)
+           ax.plot(1/x,att_model(x),label=r'A$_V$ = %.2f mag' % (cur_Av))
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('$A(x)$ [mag]')
+
+        ax.legend(loc='best')
+        plt.show()
+    """
+
+    x_range = x_range_Leit02
+
+    def __init__(self, Av):
+
+        # Assume same rv as for Calzetti 2000
+        self.Rv = 4.05
+
+        super(Leitherer02, self).__init__(Av=Av)
+
+
+    def k_lambda(self, x):
+        """ Compute the starburst reddening curve of Leitherer et al. (2002)
+            k'(λ)=A(λ)/E(B-V)
+
+         Parameters
+         ----------
+         in_x: float
+            expects either x in units of wavelengths or frequency
+            or assumes wavelengths in [micron]
+
+            internally microns are used
+
+         Returns
+         -------
+         k_lambda: np array (float)
+             k_lambda(x) reddening curve
+ 
+         Raises
+         ------
+         ValueError
+            Input x values outside of defined range
+
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        with u.add_enabled_equivalencies(u.spectral()):
+            x_quant = u.Quantity(x, u.micron, dtype=np.float64)
+
+        # strip the quantity to avoid needing to add units to all the
+        #    polynomical coefficients
+        x = x_quant.value
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_Leit02, 'Leitherer02')
+
+        axEbv = (5.472 + (0.671 * 1 / x - 
+                          9.218 * 1e-3 1 / x**2 +
+                          2.620 * 1e-3 / x**3))
+                                     
+        return axEbv
+
+
+
+    def evaluate(self, x, Av):
+        """
+        Returns the attenuation curve, A(λ), following the recipe of 
+        Leitherer et al. (2002), assuming Rv=4.05
+
+        Parameters
+        ----------
+        in_x: float
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in [micron]
+
+           internally microns are used
+
+        Returns
+        -------
+        att: np array (float)
+            Att(x) attenuation curve [mag]
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+        """
+        # convert to wavenumbers (1/micron) if x input in units
+        # otherwise, assume x in appropriate wavenumber units
+        with u.add_enabled_equivalencies(u.spectral()):
+            x_quant = u.Quantity(x, u.micron, dtype=np.float64)
+
+        # strip the quantity to avoid needing to add units to all the
+        #    polynomical coefficients
+        x = x_quant.value
+
+        # check that the wavenumbers are within the defined range
+        _test_valid_x_range(x, x_range_Leit02, 'Leitherer02')
+
+        ax = self.k_lambda(x) / self.Rv * Av
+
+        return ax
+
