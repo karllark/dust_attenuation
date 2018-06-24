@@ -244,13 +244,13 @@ Shape fitting models
 These models allow for more arbitrary shapes to be modeled than the
 other model flavors.
 
-Calzmod: modified Calzetti law of Noll09
+Noll09: modified Calzetti law of Noll09
 ----------------------------------------
 
 Noll+09 first introduced a modified version of the Calzetti 2000 law, allowing
 for a varying slope and the presence of a UV bump.
 
-Example `Calzmod` models showing variation in slopes.
+Example `Noll09` models showing variation in slopes.
 A UV bump with an amplitude of 3.5 is added to the C00 law.
 
 .. plot::
@@ -260,7 +260,7 @@ A UV bump with an amplitude of 3.5 is added to the C00 law.
       import astropy.units as u
 
       from dust_attenuation.averages import C00
-      from dust_attenuation.shapes import Calzmod
+      from dust_attenuation.shapes import Noll09
 
       fig, ax = plt.subplots()
 
@@ -273,17 +273,17 @@ A UV bump with an amplitude of 3.5 is added to the C00 law.
 
       slopes = [-1, -0.5, 0, 0.5, 1]
       for slope in slopes:
-          att_model = Calzmod(Av=1, ampl=3.5, slope=slope)
+          att_model = Noll09(Av=1, ampl=3.5, slope=slope)
           ax.plot(x, att_model(1/x), label=r'$\delta$ = %.2f' % (slope))
 
       ax.set_xlabel('$x$ [$\mu m^{-1}$]')
       ax.set_ylabel('A(x) [mag]')
 
       ax.legend(loc='best')
-      plt.title("Calzmod with varying slopes")
+      plt.title("Noll09 with varying slopes")
       plt.show()
 
-Example `Calzmod` models showing variation in UV bump amplitude.
+Example `Noll09` models showing variation in UV bump amplitude.
 The central wavelength of the UV bump and its width are kept fixed 
 to 0.2175 and 0.035 microns respectively.
 
@@ -294,7 +294,7 @@ to 0.2175 and 0.035 microns respectively.
       import astropy.units as u
 
       from dust_attenuation.averages import C00
-      from dust_attenuation.shapes import Calzmod
+      from dust_attenuation.shapes import Noll09
 
       fig, ax = plt.subplots()
 
@@ -307,14 +307,14 @@ to 0.2175 and 0.035 microns respectively.
 
       amplitudes = [0, 1, 3.5, 7, 10]
       for ampl in amplitudes:
-          att_model = Calzmod(Av=1, ampl=ampl, slope=0)
+          att_model = Noll09(Av=1, ampl=ampl, slope=0)
           ax.plot(x, att_model(1/x), label = 'ampl = %.2f' % (ampl))
 
       ax.set_xlabel('$x$ [$\mu m^{-1}$]')
       ax.set_ylabel('A(x) [mag]')
 
       ax.legend(loc='best')
-      plt.title("Calzmod with varying UV bump amplitude")
+      plt.title("Noll09 with varying UV bump amplitude")
       plt.show()
 
 
