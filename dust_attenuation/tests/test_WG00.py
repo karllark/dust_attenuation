@@ -396,7 +396,7 @@ def test_WG00_values(tauV, geometries, dust_types, dust_distribs):
     # get the correct values
     x, cor_vals = get_taux_cor_vals(tauV, geometries, dust_types,
                                     dust_distribs)
-    # initialize extinction model
+    # initialize model
     tmodel = WG00(tauV, geometry=geometries, dust_type=dust_types,
                   dust_distribution=dust_distribs)
 
@@ -418,7 +418,7 @@ def test_attenuation_WG00_attenuate_values(tauV, geometries, dust_types,
     # calculate the cor_vals in fractional units
     cor_vals = np.power(10.0, -0.4*(cor_vals*1.086))
 
-    # initialize extinction model
+    # initialize model
     tmodel = WG00(tauV, geometry=geometries, dust_type=dust_types,
                   dust_distribution=dust_distribs)
 
