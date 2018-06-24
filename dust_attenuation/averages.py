@@ -173,7 +173,7 @@ class Leitherer02(BaseAttAvModel):
     Notes
     -----
 
-    From Leitherer (2002, ApJS, Volume 140, Issue 2, pp. 303-329)
+    From Leitherer (2002, ApJS, Volume 140, Issue 2, pp. 303-329), eq. 14
 
     Example:
 
