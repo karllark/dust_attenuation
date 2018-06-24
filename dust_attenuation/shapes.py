@@ -78,9 +78,9 @@ class Noll09(BaseAttAvModel):
         plt.title("Noll09 with varying slopes")
         plt.show()
     """
- 
+
     x_range = x_range_Noll09
-     
+
     # Did not want to create a new base class only for this particular model.
     # So parameters are defined here.
 
@@ -232,14 +232,14 @@ class Noll09(BaseAttAvModel):
         -------
         np array (float)
            lorentzian-like Drude profile
- 
+
         Raises
         ------
         ValueError
            Input x values outside of defined range
 
         """
-        return ampl * (x**2 * gamma**2 / 
+        return ampl * (x**2 * gamma**2 /
                             ((x**2 - x0**2)**2 + x**2 * gamma**2))
 
 
@@ -290,7 +290,7 @@ class Noll09(BaseAttAvModel):
         -------
         k_lambda: np array (float)
            k_lambda(x) reddening curve
- 
+
         Raises
         ------
         ValueError

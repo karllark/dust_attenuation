@@ -78,7 +78,7 @@ class C00(BaseAttAvModel):
          -------
          k_lambda: np array (float)
              k_lambda(x) reddening curve
- 
+
          Raises
          ------
          ValueError
@@ -117,7 +117,7 @@ class C00(BaseAttAvModel):
 
     def evaluate(self, x, Av):
         """
-        Returns the attenuation curve, A(λ), following the recipe of 
+        Returns the attenuation curve, A(λ), following the recipe of
         Calzetti et al. (2000).
 
         Parameters
@@ -225,7 +225,7 @@ class Leitherer02(BaseAttAvModel):
          -------
          k_lambda: np array (float)
              k_lambda(x) reddening curve
- 
+
          Raises
          ------
          ValueError
@@ -244,17 +244,17 @@ class Leitherer02(BaseAttAvModel):
         # check that the wavenumbers are within the defined range
         _test_valid_x_range(x, x_range_Leit02, 'Leitherer02')
 
-        axEbv = (5.472 + (0.671 * 1 / x - 
+        axEbv = (5.472 + (0.671 * 1 / x -
                           9.218 * 1e-3 / x**2 +
                           2.620 * 1e-3 / x**3))
-                                     
+
         return axEbv
 
 
 
     def evaluate(self, x, Av):
         """
-        Returns the attenuation curve, A(λ), following the recipe of 
+        Returns the attenuation curve, A(λ), following the recipe of
         Leitherer et al. (2002), assuming Rv=4.05
 
         Parameters
@@ -290,4 +290,3 @@ class Leitherer02(BaseAttAvModel):
         ax = self.k_lambda(x) / self.Rv * Av
 
         return ax
-
