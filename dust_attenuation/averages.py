@@ -60,15 +60,7 @@ class C00(BaseAttAvModel):
     """
 
     x_range = x_range_C00
-
-    def __init__(self, Av):
-   
-        self.Rv = 4.05
-
-        # In Python 2: super(C00, self) 
-        # In Python 3: super() but super(C00, self) still works
-        super(C00, self).__init__(Av=Av)
-
+    Rv = 4.05
 
     def k_lambda(self, x):
         """ Compute the starburst reddening curve of Calzetti et al. (2000)
@@ -213,12 +205,8 @@ class Leitherer02(BaseAttAvModel):
 
     x_range = x_range_Leit02
 
-    def __init__(self, Av):
-
-        # Assume same rv as for Calzetti 2000
-        self.Rv = 4.05
-
-        super(Leitherer02, self).__init__(Av=Av)
+    # Assume same rv as for Calzetti 2000
+    Rv = 4.05
 
 
     def k_lambda(self, x):
@@ -257,7 +245,7 @@ class Leitherer02(BaseAttAvModel):
         _test_valid_x_range(x, x_range_Leit02, 'Leitherer02')
 
         axEbv = (5.472 + (0.671 * 1 / x - 
-                          9.218 * 1e-3 1 / x**2 +
+                          9.218 * 1e-3 / x**2 +
                           2.620 * 1e-3 / x**3))
                                      
         return axEbv
