@@ -160,10 +160,10 @@ model radial A(V) values.
     plt.show()
 
 
-Example: Use Calzmod to fit WG00
+Example: Use Noll09 to fit WG00
 ================================
 
-In this example, we are using the modified Calzetti law, *Calzmod*, to
+In this example, we are using the modified Calzetti law from  Noll et al. 2009 to
 fit some attenuation curves computed with radiative transfer model (WG00).
 We chose 2 attenuation curves from the WG00 models: 
 
@@ -185,7 +185,7 @@ The best fit values are given in the title of each figure:
     from astropy.modeling.fitting import LevMarLSQFitter
     import astropy.units as u
 
-    from dust_attenuation.shapes import Calzmod
+    from dust_attenuation.shapes import Noll09
     from dust_attenuation.radiative_transfer import WG00
 
     # Generate an attenuation curve with WG00 and add some noise
@@ -216,7 +216,7 @@ The best fit values are given in the title of each figure:
         y = y_nonoise + noise
 
         # initialize the fitting model
-        att_init = Calzmod(Av=1, slope=-0.5,ampl=3)
+        att_init = Noll09(Av=1, slope=-0.5,ampl=3)
 
         # Fix central wavelength of the UV bump
         att_init.x0.fixed = True
@@ -238,7 +238,7 @@ The best fit values are given in the title of each figure:
         ax.set_xlabel('$x$ [$\mu m^{-1}$]', size=16)
         ax.set_ylabel('$Ax $', size=16)
         ax.tick_params(labelsize=15)
-        ax.set_title('Fitting WG00 (%s / %s / %s / tau_V=%.2f) with Calzmod\n\n Best fit: x0=%.2f, gamma=%.2f\n ampl=%.2f, slope=%.2f, Av=%.2f\n ' % (dust, geo, distrib, tau, att_fit.x0.value, att_fit.gamma.value, att_fit.ampl.value, att_fit.slope.value, att_fit.Av.value), size=16)
+        ax.set_title('Fitting WG00 (%s / %s / %s / tau_V=%.2f) with Noll09\n\n Best fit: x0=%.2f, gamma=%.2f\n ampl=%.2f, slope=%.2f, Av=%.2f\n ' % (dust, geo, distrib, tau, att_fit.x0.value, att_fit.gamma.value, att_fit.ampl.value, att_fit.slope.value, att_fit.Av.value), size=16)
 
         ax.legend(loc='best')
         plt.tight_layout()
