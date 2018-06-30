@@ -364,7 +364,6 @@ class N09mod(N09):
     """
     Attenuation curve using a modified version of the Calzetti law
     allowing for a varying UV slope and the presence of a UV bump.
-    
 
     Parameters
     ----------
@@ -488,4 +487,3 @@ class N09mod(N09):
         axEbv += self.uv_bump(x, x0, gamma, ampl)
 
         return axEbv
-
