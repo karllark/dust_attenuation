@@ -6,15 +6,16 @@ import astropy.units as u
 from .baseclasses import BaseAttAvModel
 from .helpers import _test_valid_x_range
 
-from .averages import C00, Leitherer02
+from .averages import C00, L02
 from astropy.modeling import Parameter, InputParameterError
 
-__all__ = ['Noll09']
+__all__ = ['N09', 'N09mod']
 
-x_range_Noll09 = [0.097, 2.2]
+x_range_N09 = [0.097, 2.2]
+x_range_N09mod = [0.097, 2.2]
 
 
-class Noll09(BaseAttAvModel):
+class N09(BaseAttAvModel):
     """
     Attenuation curve using a modified version of the Calzetti law
     allowing for a varying UV slope and the presence of a UV bump.
@@ -45,10 +46,6 @@ class Noll09(BaseAttAvModel):
     -----
 
     The original formalism is from Noll et al, A&A 507, 1793–1813 (2009).
-    However the UV bump was added before applying the power law correction.
-    In this class we follow the modified version of Salim et al 2018 (The
-    Astrophysical Journal, Volume 859, Issue 1, article id. 11, 17 pp.)
-     where the UV bump is added after the power law correction.
 
     Example:
 
@@ -59,7 +56,7 @@ class Noll09(BaseAttAvModel):
         import numpy as np
         import astropy.units as u
 
-        from dust_attenuation.shapes import Noll09
+        from dust_attenuation.shapes import N09
 
         fig, ax = plt.subplots()
 
@@ -68,7 +65,7 @@ class Noll09(BaseAttAvModel):
 
         slopes = [-1, -0.5, 0, 0.5, 1]
         for slope in slopes:
-            att_model = Noll09(Av=1,ampl=3.5,slope=slope)
+            att_model = N09(Av=1,ampl=3.5,slope=slope)
             ax.plot(x,att_model(1/x),label=r'$\delta$ = %.2f' % (slope))
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
@@ -79,7 +76,7 @@ class Noll09(BaseAttAvModel):
         plt.show()
     """
 
-    x_range = x_range_Noll09
+    x_range = x_range_N09
 
     # Did not want to create a new base class only for this particular model.
     # So parameters are defined here.
@@ -200,16 +197,6 @@ class Noll09(BaseAttAvModel):
     Rv_C00 = 4.05
 
 
-    """
-    def __init__(self):
-
-        self.Rv = 4.05
-
-        # In Python 2: super(C00, self) 
-        # In Python 3: super() but super(C00, self) still works
-        super(Noll09, self).__init__()
-
-    """
     def uv_bump(self, x, x0, gamma, ampl):
         """
         Drude profile for computing the UV bump.
@@ -307,32 +294,24 @@ class Noll09(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_Noll09, 'Noll09')
+        _test_valid_x_range(x, x_range_N09, 'N09')
 
         # setup the axEbv vectors
         axEbv = np.zeros(len(x))
 
         # Compute reddening curve using Calzetti 2000
-        # Wavelength range taken from Salim+18
         mask_C00 = x > 0.15
         axEbv[mask_C00] = C00().k_lambda(x[mask_C00])
 
         # Use recipe of Leitherer 2002 below 0.15 microns
-        # Wavelength range taken from Salim+18
-        mask_leit02 = x <= 0.15
-        axEbv[mask_leit02] = Leitherer02().k_lambda(x[mask_leit02])
-
-        # Compute the new Rv depending on the value of the power law slope
-        #Rv_mod = self.Rv_C00 / ((self.Rv_C00 + 1) * (0.44/0.55)**slope - self.Rv_C00)
-        # Correct the reddening curve so that E(B-V) remains unchanged when slope !=0
-        #axEbv *= Rv_mod / self.Rv_C00
-        # Note: this does not seem to work well. Need to check later.
-
-        # Multiply the reddening curve with a power law with varying slope
-        axEbv *= self.power_law(x, slope)
+        mask_L02 = x <= 0.15
+        axEbv[mask_L02] = L02().k_lambda(x[mask_L02])
 
         # Add the UV bump using the Drude profile
         axEbv += self.uv_bump(x, x0, gamma, ampl)
+
+        # Multiply the reddening curve with a power law with varying slope
+        axEbv *= self.power_law(x, slope)
 
         return axEbv
 
@@ -373,6 +352,112 @@ class Noll09(BaseAttAvModel):
         ValueError
            Input x values outside of defined range
         """
+
+        axEbv = self.k_lambda(x, x0, gamma, ampl, slope)
+        ax = axEbv / self.Rv_C00 * Av
+
+        return ax
+
+
+
+class N09mod(N09):
+    """
+    Attenuation curve using a modified version of the Calzetti law
+    allowing for a varying UV slope and the presence of a UV bump.
+    
+
+    Parameters
+    ----------
+    x0: float
+        Central wavelength of the UV bump (in microns).
+
+    gamma: float
+        Width (FWHM) of thhe UV bump (in microns).
+
+    ampl: float
+        Amplitude of the UV bump.
+
+    slope: float
+        Slope of the power law.
+
+    Av: float
+        attenuation in V band.
+
+    Raises
+    ------
+    InputParameterError
+       Input Av values outside of defined range
+
+    Notes
+    -----
+
+    The original formalism is from Noll et al, A&A 507, 1793–1813 (2009).
+    However the UV bump was added before applying the power law correction.
+    In this class the UV bump is added after the power law correction.
+
+    Example:
+
+    .. plot::
+        :include-source:
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        import astropy.units as u
+
+        from dust_attenuation.shapes import N09mod
+
+        fig, ax = plt.subplots()
+
+        # generate the curves and plot them
+        x = np.arange(0.5,10,0.1)/u.micron
+
+        slopes = [-1, -0.5, 0, 0.5, 1]
+        for slope in slopes:
+            att_model = N09mod(Av=1,ampl=3.5,slope=slope)
+            ax.plot(x,att_model(1/x),label=r'$\delta$ = %.2f' % (slope))
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel('A(x) [mag]')
+
+        ax.legend(loc='best')
+        plt.title("N09mod with varying slopes")
+        plt.show()
+    """
+
+    def k_lambda(self, x, x0, gamma, ampl, slope):
+        """ Compute the starburst reddening curve k'(λ)=A(λ)/E(B-V)
+        using recipe of Calzetti 2000 and Leitherer 2002
+
+        Parameters
+        ----------
+        in_x: np array (float)
+           expects either x in units of wavelengths or frequency
+           or assumes wavelengths in [micron]
+           internally microns are used
+
+        x0: float
+           Central wavelength of the UV bump (in microns).
+
+        gamma: float
+           Width (FWHM) of thhe UV bump (in microns).
+
+        ampl: float
+           Amplitude of the UV bump.
+
+        slope: float
+           Slope of the power law.
+
+        Returns
+        -------
+        k_lambda: np array (float)
+           k_lambda(x) reddening curve
+
+        Raises
+        ------
+        ValueError
+           Input x values outside of defined range
+
+        """
         # convert to wavenumbers (1/micron) if x input in units
         # otherwise, assume x in appropriate wavenumber units
         with u.add_enabled_equivalencies(u.spectral()):
@@ -383,9 +468,24 @@ class Noll09(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_Noll09, 'Noll09')
+        _test_valid_x_range(x, x_range_N09mod, 'N09mod')
 
-        axEbv = self.k_lambda(x, x0, gamma, ampl, slope)
-        ax = axEbv / self.Rv_C00 * Av
+        # setup the axEbv vectors
+        axEbv = np.zeros(len(x))
 
-        return ax
+        # Compute reddening curve using Calzetti 2000
+        mask_C00 = x > 0.15
+        axEbv[mask_C00] = C00().k_lambda(x[mask_C00])
+
+        # Use recipe of Leitherer 2002 below 0.15 microns
+        mask_L02 = x <= 0.15
+        axEbv[mask_L02] = L02().k_lambda(x[mask_L02])
+
+        # Multiply the reddening curve with a power law with varying slope
+        axEbv *= self.power_law(x, slope)
+
+        # Add the UV bump using the Drude profile
+        axEbv += self.uv_bump(x, x0, gamma, ampl)
+
+        return axEbv
+

@@ -6,10 +6,10 @@ import astropy.units as u
 from .baseclasses import BaseAttAvModel
 from .helpers import _test_valid_x_range
 
-__all__ = ['C00', 'Leitherer02']
+__all__ = ['C00', 'L02']
 
 x_range_C00 = [0.12, 2.2]
-x_range_Leit02 = [0.097, 0.18]
+x_range_L02 = [0.097, 0.18]
 
 
 class C00(BaseAttAvModel):
@@ -155,7 +155,7 @@ class C00(BaseAttAvModel):
         return ax
 
 
-class Leitherer02(BaseAttAvModel):
+class L02(BaseAttAvModel):
     """
     Attenuation curve of Leitherer et al. (2002).
     Narrow validity range: 0.097 to 0.18 microns
@@ -184,7 +184,7 @@ class Leitherer02(BaseAttAvModel):
         import matplotlib.pyplot as plt
         import astropy.units as u
 
-        from dust_attenuation.averages import Leitherer02
+        from dust_attenuation.averages import L02
 
         fig, ax = plt.subplots()
 
@@ -193,7 +193,7 @@ class Leitherer02(BaseAttAvModel):
 
         Avs = [0.1,0.5,1.0,2.0,5.0]
         for cur_Av in Avs:
-           att_model = Leitherer02(Av=cur_Av)
+           att_model = L02(Av=cur_Av)
            ax.plot(1/x,att_model(x),label=r'A$_V$ = %.2f mag' % (cur_Av))
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
@@ -203,7 +203,7 @@ class Leitherer02(BaseAttAvModel):
         plt.show()
     """
 
-    x_range = x_range_Leit02
+    x_range = x_range_L02
 
     # Assume same rv as for Calzetti 2000
     Rv = 4.05
@@ -242,7 +242,7 @@ class Leitherer02(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_Leit02, 'Leitherer02')
+        _test_valid_x_range(x, x_range_L02, 'L02')
 
         axEbv = (5.472 + (0.671 * 1 / x -
                           9.218 * 1e-3 / x**2 +
@@ -285,7 +285,7 @@ class Leitherer02(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_Leit02, 'Leitherer02')
+        _test_valid_x_range(x, x_range_L02, 'L02')
 
         ax = self.k_lambda(x) / self.Rv * Av
 

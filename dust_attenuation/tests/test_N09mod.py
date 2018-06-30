@@ -4,61 +4,61 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..shapes import Noll09
+from ..shapes import N09mod
 from .helpers import _invalid_x_range
 
 
 @pytest.mark.parametrize("x0_invalid", [-1.0, -0.00001, -10])
 def test_invalid_x0_input(x0_invalid):
     with pytest.raises(InputParameterError) as exc:
-        tmodel = Noll09(x0=x0_invalid)
+        tmodel = N09mod(x0=x0_invalid)
     assert exc.value.args[0] == 'parameter x0 must be positive'
 
 @pytest.mark.parametrize("gamma_invalid", [-1.0, -0.00001, -10])
 def test_invalid_gamma_input(gamma_invalid):
     with pytest.raises(InputParameterError) as exc:
-        tmodel = Noll09(gamma=gamma_invalid)
+        tmodel = N09mod(gamma=gamma_invalid)
     assert exc.value.args[0] == 'parameter gamma must be positive'
 
 @pytest.mark.parametrize("ampl_invalid", [-1.0, -0.00001, -10])
 def test_invalid_ampl_input(ampl_invalid):
     with pytest.raises(InputParameterError) as exc:
-        tmodel = Noll09(ampl=ampl_invalid)
+        tmodel = N09mod(ampl=ampl_invalid)
     assert exc.value.args[0] == 'parameter ampl must be positive'
 
 @pytest.mark.parametrize("slope_invalid", [-4.0, -3.00001, 10])
 def test_invalid_slope_input(slope_invalid):
     with pytest.raises(InputParameterError) as exc:
-        tmodel = Noll09(slope=slope_invalid)
+        tmodel = N09mod(slope=slope_invalid)
     assert exc.value.args[0] == 'parameter slope must be between -3.0 and 3.0'
 
 @pytest.mark.parametrize("Av_invalid", [-1.0, -0.00001, -10])
 def test_invalid_Av_input(Av_invalid):
     with pytest.raises(InputParameterError) as exc:
-        tmodel = Noll09(Av=Av_invalid)
+        tmodel = N09mod(Av=Av_invalid)
     assert exc.value.args[0] == 'parameter Av must be positive'
 
 @pytest.mark.parametrize("x_invalid", [-1.0, 0.09, 11, 100.])
 def test_invalid_wavenumbers(x_invalid):
-    _invalid_x_range(x_invalid, Noll09(), 'Noll09')
+    _invalid_x_range(x_invalid, N09mod(), 'N09mod')
 
 
 @pytest.mark.parametrize("x_invalid_wavenumber",
                          [-1.0, 0.09, 11, 100.]/u.micron)
 def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    _invalid_x_range(x_invalid_wavenumber, Noll09(), 'Noll09')
+    _invalid_x_range(x_invalid_wavenumber, N09mod(), 'N09mod')
 
 
 @pytest.mark.parametrize("x_invalid_micron",
                          u.micron/[-1.0, 0.09, 11, 100.])
 def test_invalid_micron(x_invalid_micron):
-    _invalid_x_range(x_invalid_micron, Noll09(), 'Noll09')
+    _invalid_x_range(x_invalid_micron, N09mod(), 'N09mod')
 
 
 @pytest.mark.parametrize("x_invalid_angstrom",
                          u.angstrom*1e4/[-1.0, 0.09, 11, 100.])
 def test_invalid_angstrom(x_invalid_angstrom):
-    _invalid_x_range(x_invalid_angstrom, Noll09(), 'Noll09')
+    _invalid_x_range(x_invalid_angstrom, N09mod(), 'N09mod')
 
 
 def get_axav_cor_vals(x0, gamma, ampl, slope, Av):
@@ -368,12 +368,12 @@ def get_axav_cor_vals(x0, gamma, ampl, slope, Av):
 @pytest.mark.parametrize("ampl", [0.0, 5.0, 20])
 @pytest.mark.parametrize("slope", [-1.0, 0.0, 1.0])
 @pytest.mark.parametrize("Av", [0.2, 1.0, 10.0])
-def test_attenuation_Noll09_values(x0, gamma, ampl, slope, Av):
+def test_attenuation_N09mod_values(x0, gamma, ampl, slope, Av):
     # get the correct values
     x, cor_vals = get_axav_cor_vals(x0, gamma, ampl, slope, Av)
 
     # initialize model
-    tmodel = Noll09(x0=x0, gamma=gamma, ampl=ampl, slope=slope, Av=Av)
+    tmodel = N09mod(x0=x0, gamma=gamma, ampl=ampl, slope=slope, Av=Av)
 
     # test. Needed to decreased atol to 1e-7 because of Av=0.2 case
     np.testing.assert_allclose(tmodel(x), cor_vals[::-1], atol=1e-7)
@@ -383,7 +383,7 @@ def test_attenuation_Noll09_values(x0, gamma, ampl, slope, Av):
 @pytest.mark.parametrize("ampl", [0.0, 5.0, 20])
 @pytest.mark.parametrize("slope", [-1.0, 0.0, 1.0])
 @pytest.mark.parametrize("Av", [0.2, 1.0, 10.0])
-def test_attenuation_Noll09_attenuate_values(x0, gamma, ampl, slope, Av):
+def test_attenuation_N09mod_attenuate_values(x0, gamma, ampl, slope, Av):
     # get the correct values
     x, cor_vals = get_axav_cor_vals(x0, gamma, ampl, slope, Av)
 
@@ -391,7 +391,7 @@ def test_attenuation_Noll09_attenuate_values(x0, gamma, ampl, slope, Av):
     cor_vals = np.power(10.0, -0.4*(cor_vals))
 
     # initialize model
-    tmodel = Noll09(x0=x0, gamma=gamma, ampl=ampl, slope=slope, Av=Av)
+    tmodel = N09mod(x0=x0, gamma=gamma, ampl=ampl, slope=slope, Av=Av)
 
     # test
     np.testing.assert_allclose(tmodel.attenuate(x), cor_vals[::-1], atol=1e-6)

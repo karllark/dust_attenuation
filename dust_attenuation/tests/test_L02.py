@@ -4,38 +4,38 @@ import pytest
 import astropy.units as u
 from astropy.modeling import InputParameterError
 
-from ..averages import Leitherer02
+from ..averages import L02
 from .helpers import _invalid_x_range
 
 
 @pytest.mark.parametrize("Av_invalid", [-1.0, -0.00001, -10])
 def test_invalid_Av_input(Av_invalid):
     with pytest.raises(InputParameterError) as exc:
-        tmodel = Leitherer02(Av=Av_invalid)
+        tmodel = L02(Av=Av_invalid)
     assert exc.value.args[0] == 'parameter Av must be positive'
 
 
 @pytest.mark.parametrize("x_invalid", [-1.0, 0.09, 11, 100.])
 def test_invalid_wavenumbers(x_invalid):
-    _invalid_x_range(x_invalid, Leitherer02(), 'Leitherer02')
+    _invalid_x_range(x_invalid, L02(), 'L02')
 
 
 @pytest.mark.parametrize("x_invalid_wavenumber",
                          [-1.0, 0.09, 11, 100.]/u.micron)
 def test_invalid_wavenumbers_imicron(x_invalid_wavenumber):
-    _invalid_x_range(x_invalid_wavenumber, Leitherer02(), 'Leitherer02')
+    _invalid_x_range(x_invalid_wavenumber, L02(), 'L02')
 
 
 @pytest.mark.parametrize("x_invalid_micron",
                          u.micron/[-1.0, 0.08, 11, 100.])
 def test_invalid_micron(x_invalid_micron):
-    _invalid_x_range(x_invalid_micron, Leitherer02(), 'Leitherer02')
+    _invalid_x_range(x_invalid_micron, L02(), 'L02')
 
 
 @pytest.mark.parametrize("x_invalid_angstrom",
                          u.angstrom*1e4/[-1.0, 0.09, 11, 100.])
 def test_invalid_angstrom(x_invalid_angstrom):
-    _invalid_x_range(x_invalid_angstrom, Leitherer02(), 'Leitherer02')
+    _invalid_x_range(x_invalid_angstrom, L02(), 'L02')
 
 
 def get_axav_cor_vals(Av):
@@ -92,19 +92,19 @@ def get_axav_cor_vals(Av):
 
 
 @pytest.mark.parametrize("Av", [0.2, 1.0, 2.4, 5.0, 10.0])
-def test_attenuation_Leitherer02_values(Av):
+def test_attenuation_L02_values(Av):
     # get the correct values
     x, cor_vals = get_axav_cor_vals(Av)
 
     # initialize extinction model
-    tmodel = Leitherer02(Av=Av)
+    tmodel = L02(Av=Av)
 
     # test.
     np.testing.assert_allclose(tmodel(x), cor_vals, atol=1e-7)
 
 
 @pytest.mark.parametrize("Av", [0.2, 1.0, 2.4, 5.0, 10.0])
-def test_attenuation_Leitherer02_attenuate_values_Av(Av):
+def test_attenuation_L02_attenuate_values_Av(Av):
     # get the correct values
     x, cor_vals = get_axav_cor_vals(Av)
 
@@ -112,7 +112,7 @@ def test_attenuation_Leitherer02_attenuate_values_Av(Av):
     cor_vals = np.power(10.0, -0.4*(cor_vals))
 
     # initialize extinction model
-    tmodel = Leitherer02(Av=Av)
+    tmodel = L02(Av=Av)
 
     # test
     np.testing.assert_allclose(tmodel.attenuate(x), cor_vals, atol=1e-6)
