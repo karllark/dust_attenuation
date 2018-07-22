@@ -12,7 +12,7 @@ These models provide averages from the literature with the ability to
 interpolate between the observed data points.  In general, these average
 models have shapes that are not dependent on the amount of dust.
 
-The `COO` average attenuation model is based on a small number of
+The `C00` average attenuation model is based on a small number of
 starburst galaxies observed
 in the ultraviolet with the International Ultraviolet Explorer (IUE)
 supplemented with ground-based optical spectroscopy,
@@ -247,7 +247,7 @@ other model flavors.
 N09: modified Calzetti law from Noll et al. 2009
 ------------------------------------------------
 
-Noll+09 first introduced a modified version of the Calzetti 2000 law, allowing
+Noll+09 first introduced a modified version of the `C00` law, allowing
 for a varying slope and the presence of a UV bump.
 
 Example `N09` models showing variation in slopes.
@@ -318,17 +318,17 @@ to 0.2175 and 0.035 microns respectively.
       plt.show()
 
 
-N09mod: modified version of N09
+SBL18: modified version of N09
 -------------------------------
 
-Noll+09 first introduced a modified version of the Calzetti 2000 law, allowing
+`N09` first introduced a modified version of the `C00` law, allowing
 for a varying slope and the presence of a UV bump. In the original formalism,
-the UV bump is affected by the power law. In the `N09mod` class the UV bump is added 
+the UV bump is affected by the power law. In the `SBL18` class the UV bump is added 
 to the attenuation law after applying the power law.
 
-Example comparing variation in UV bump strength for `N09` and `N09mod` models.
-The slope is fixed to -0.5. Continuous and dashed lines are for `N09` and `N09mod` respectively.
-The UV bump amplitude of `N09` is stronger than `N09mod`.
+Example comparing variation in UV bump strength for `N09` and `SBL18` models.
+The slope is fixed to -0.5. Continuous and dashed lines are for `N09` and `SBL18` respectively.
+The UV bump amplitude of `N09` is stronger than `SBL18`.
 
 .. plot::
 
@@ -337,7 +337,7 @@ The UV bump amplitude of `N09` is stronger than `N09mod`.
       import astropy.units as u
 
       from dust_attenuation.averages import C00
-      from dust_attenuation.shapes import N09, N09mod
+      from dust_attenuation.shapes import N09, SBL18
 
       fig, ax = plt.subplots()
 
@@ -354,7 +354,7 @@ The UV bump amplitude of `N09` is stronger than `N09mod`.
       for ampl in amplitudes:
           c = next(color)
           att_model = N09(Av=1, ampl=ampl, slope=-0.5)
-          att_model2 = N09mod(Av=1, ampl=ampl, slope=-0.5)
+          att_model2 = SBL18(Av=1, ampl=ampl, slope=-0.5)
           ax.plot(x, att_model(1/x), color=c, label = 'ampl = %.2f' % (ampl))
           ax.plot(x, att_model2(1/x), color=c, ls='--')
 
@@ -362,12 +362,12 @@ The UV bump amplitude of `N09` is stronger than `N09mod`.
       ax.set_ylabel('A(x) [mag]')
 
       ax.legend(loc='best')
-      plt.title("N09 and N09mod with varying UV bump amplitudes")
+      plt.title("N09 and SBL18 with varying UV bump amplitudes")
       plt.show()
 
 
-The slope is now fixed to 0.5. Continuous and dashed lines are for `N09` and `N09mod` respectively.
-The UV bump amplitude of `N09` is now weaker than `N09mod`.
+The slope is now fixed to 0.5. Continuous and dashed lines are for `N09` and `SBL18` respectively.
+The UV bump amplitude of `N09` is now weaker than `SBL18`.
 
 .. plot::
 
@@ -376,7 +376,7 @@ The UV bump amplitude of `N09` is now weaker than `N09mod`.
       import astropy.units as u
 
       from dust_attenuation.averages import C00
-      from dust_attenuation.shapes import N09, N09mod
+      from dust_attenuation.shapes import N09, SBL18
 
       fig, ax = plt.subplots()
 
@@ -393,7 +393,7 @@ The UV bump amplitude of `N09` is now weaker than `N09mod`.
       for ampl in amplitudes:
           c = next(color)
           att_model = N09(Av=1, ampl=ampl, slope=0.5)
-          att_model2 = N09mod(Av=1, ampl=ampl, slope=0.5)
+          att_model2 = SBL18(Av=1, ampl=ampl, slope=0.5)
           ax.plot(x, att_model(1/x), color=c, label = 'ampl = %.2f' % (ampl))
           ax.plot(x, att_model2(1/x), color=c, ls='--')
 
@@ -401,7 +401,7 @@ The UV bump amplitude of `N09` is now weaker than `N09mod`.
       ax.set_ylabel('A(x) [mag]')
 
       ax.legend(loc='best')
-      plt.title("N09 and N09mod with varying UV bump amplitudes")
+      plt.title("N09 and SBL18 with varying UV bump amplitudes")
       plt.show()
 
 

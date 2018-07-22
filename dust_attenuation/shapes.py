@@ -9,10 +9,10 @@ from .helpers import _test_valid_x_range
 from .averages import C00, L02
 from astropy.modeling import Parameter, InputParameterError
 
-__all__ = ['N09', 'N09mod']
+__all__ = ['N09', 'SBL18']
 
 x_range_N09 = [0.097, 2.2]
-x_range_N09mod = [0.097, 2.2]
+x_range_SBL18 = [0.097, 2.2]
 
 
 class N09(BaseAttAvModel):
@@ -360,7 +360,7 @@ class N09(BaseAttAvModel):
 
 
 
-class N09mod(N09):
+class SBL18(N09):
     """
     Attenuation curve using a modified version of the Calzetti law
     allowing for a varying UV slope and the presence of a UV bump.
@@ -390,9 +390,11 @@ class N09mod(N09):
     Notes
     -----
 
-    The original formalism is from Noll et al, A&A 507, 1793–1813 (2009).
-    However the UV bump was added before applying the power law correction.
-    In this class the UV bump is added after the power law correction.
+    Modification of N09 formalism: the UV bump was added before applying
+    the power law correction in N09, in this class the UV bump is now added
+    after the power law correction.
+    This modification is first mentionned in in ApJ, Volume 859, Issue 1,
+    article id. 11, 17 pp. (2018)
 
     Example:
 
@@ -403,7 +405,7 @@ class N09mod(N09):
         import numpy as np
         import astropy.units as u
 
-        from dust_attenuation.shapes import N09mod
+        from dust_attenuation.shapes import SBL18
 
         fig, ax = plt.subplots()
 
@@ -412,14 +414,14 @@ class N09mod(N09):
 
         slopes = [-1, -0.5, 0, 0.5, 1]
         for slope in slopes:
-            att_model = N09mod(Av=1,ampl=3.5,slope=slope)
+            att_model = SBL18(Av=1,ampl=3.5,slope=slope)
             ax.plot(x,att_model(1/x),label=r'$\delta$ = %.2f' % (slope))
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
         ax.set_ylabel('A(x) [mag]')
 
         ax.legend(loc='best')
-        plt.title("N09mod with varying slopes")
+        plt.title("SBL18 with varying slopes")
         plt.show()
     """
 
@@ -467,7 +469,7 @@ class N09mod(N09):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_N09mod, 'N09mod')
+        _test_valid_x_range(x, x_range_SBL18, 'SBL18')
 
         # setup the axEbv vectors
         axEbv = np.zeros(len(x))

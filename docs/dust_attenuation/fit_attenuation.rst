@@ -11,7 +11,7 @@ is chosen, and the fit performed.
 Example: C00 Fit
 ================
 
-In this example, a mock attenuation curve (C00 model with noise)
+In this example, a mock attenuation curve (`C00` model with noise)
 is fitted with the C00 model.
 
 .. plot::
@@ -70,9 +70,9 @@ is fitted with the C00 model.
 Example: Use WG00 to fit C00
 ============================
 
-In this example, we are using the WG00 attenuation curves to
-fit the Calzetti attenuation curve (C00 model) with Att(V) = 1 mag and noise.
-The two WGOO configurations that best fit both have SMC-type dust and are
+In this example, we are using the `WG00` attenuation curves to
+fit the Calzetti attenuation curve (`C00` model) with Att(V) = 1 mag and noise.
+The two `WG00` configurations that best fit both have SMC-type dust and are
 the SHELL geometry with clumpy dust distribution and the
 DUSTY geometry with homogeneous dust distribution.
 The best fit values of the amount of dust in the system are given as the
@@ -160,11 +160,12 @@ model radial A(V) values.
     plt.show()
 
 
-Example: Use N09mod to fit WG00
+Example: Use SBL18 to fit WG00
 ================================
 
-In this example, we are using the modified Calzetti law from  Noll et al. 2009 to
-fit some attenuation curves computed with radiative transfer model (WG00).
+In this example, we are using the modified Calzetti law from `N09`,
+with the modification of `SBL18`  to fit some attenuation curves
+computed with the radiative transfer model of `WG00`.
 We chose 2 attenuation curves from the WG00 models: 
 
 - MW dust type with the CLOUDY geometry, a clumpy local dust distribution and tau_V=1   
@@ -185,7 +186,7 @@ The best fit values are given in the title of each figure:
     from astropy.modeling.fitting import LevMarLSQFitter
     import astropy.units as u
 
-    from dust_attenuation.shapes import N09mod
+    from dust_attenuation.shapes import SBL18
     from dust_attenuation.radiative_transfer import WG00
 
     # Generate an attenuation curve with WG00 and add some noise
@@ -216,7 +217,7 @@ The best fit values are given in the title of each figure:
         y = y_nonoise + noise
 
         # initialize the fitting model
-        att_init = N09mod(Av=1, slope=-0.5,ampl=3)
+        att_init = SBL18(Av=1, slope=-0.5,ampl=3)
 
         # Fix central wavelength of the UV bump
         att_init.x0.fixed = True
@@ -238,7 +239,7 @@ The best fit values are given in the title of each figure:
         ax.set_xlabel('$x$ [$\mu m^{-1}$]', size=16)
         ax.set_ylabel('$Ax $', size=16)
         ax.tick_params(labelsize=15)
-        ax.set_title('Fitting WG00 (%s / %s / %s / tau_V=%.2f) with N09mod\n\n Best fit: x0=%.2f, gamma=%.2f\n ampl=%.2f, slope=%.2f, Av=%.2f\n ' % (dust, geo, distrib, tau, att_fit.x0.value, att_fit.gamma.value, att_fit.ampl.value, att_fit.slope.value, att_fit.Av.value), size=16)
+        ax.set_title('Fitting WG00 (%s / %s / %s / tau_V=%.2f) with SBL18\n\n Best fit: x0=%.2f, gamma=%.2f\n ampl=%.2f, slope=%.2f, Av=%.2f\n ' % (dust, geo, distrib, tau, att_fit.x0.value, att_fit.gamma.value, att_fit.ampl.value, att_fit.slope.value, att_fit.Av.value), size=16)
 
         ax.legend(loc='best')
         plt.tight_layout()
