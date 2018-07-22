@@ -62,12 +62,17 @@ class WG00_widget:
         geometry.on_clicked(self.update_geometry)
 
 
-        rax = plt.axes([0.05, 0.15, 0.23, 0.15], facecolor=axcolor)
+        rax = plt.axes([0.05, 0.15, 0.15, 0.15], facecolor=axcolor)
         distrib = wgt.RadioButtons(rax,
                                     ('Homogeneous', 'Clumpy'))
         distrib.on_clicked(self.update_dust_distrib)
 
-        rax = plt.axes([.2,.05,.6,.0275])
+        rax = plt.axes([0.05, 0.03, 0.12, 0.08], facecolor=axcolor)
+        norm = wgt.CheckButtons(rax, (r'Normalised to A$_V$',), (True,))
+        norm.on_clicked(self.update_norm)
+        self.norm = True
+
+        rax = plt.axes([.3,.05,.6,.0275])
         tau_V = wgt.Slider(rax, r'$\tau_V$', 0.5, 50,
                            valinit=self.param['tau_V'])
         tau_V.on_changed(self.update_tau_V)
@@ -119,12 +124,15 @@ class WG00_widget:
 
         self.update_att_curve()
 
-
+    def update_norm(self, val):
+        self.norm = not self.norm
+        self.update_att_curve()
 
     def update_att_curve(self):
         self.att = self.att_model(1/self.x)
         self.att_V = self.att_model(self.x_Vband)
-        self.ext = self.att_model.get_extinction(1/self.x, 1)
+        self.ext = self.att_model.get_extinction(1/self.x, self.param['tau_V'])
+        self.ext_V = self.param['tau_V'] * 1.086
         self.fsca = self.att_model.get_fsca(1/self.x, self.param['tau_V'])
         self.fdir = self.att_model.get_fdir(1/self.x, self.param['tau_V'])
         self.fesc = self.att_model.get_fesc(1/self.x, self.param['tau_V'])
@@ -209,8 +217,17 @@ class WG00_widget:
                 color='C1'
             elif self.param['dust_type'] == 'SMC':
                 color = 'C0'
-            self.plot_att.set_ydata(self.att/self.att_V)
-            self.plot_ext.set_ydata(self.ext)
+            if self.norm:
+                self.plot_att.set_ydata(self.att/self.att_V)
+                self.plot_ext.set_ydata(self.ext/self.ext_V)
+                self.axatt.set_ylabel(r'A$_{\lambda}$ / A$_V$', size=16 )
+                self.axatt.set_ylim(0,10)
+            else:
+                self.plot_att.set_ydata(self.att)
+                self.plot_ext.set_ydata(self.ext)
+                self.axatt.set_ylabel(r'A$_{\lambda}$', size=16 )
+                self.axatt.set_ylim(0, max(np.max(self.ext),10))
+
             self.plot_att.set_color(color)
             self.plot_ext.set_color(color)
             self.axatt.legend(prop={'size': 16})
