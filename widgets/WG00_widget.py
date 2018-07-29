@@ -47,7 +47,7 @@ class WG00_widget:
 
         axcolor = 'lightgoldenrodyellow'
 
-        self.rax_sketch = plt.axes([.02,.7,.3,.3])
+        self.rax_sketch = plt.axes([.03,.68,.25,.32])
         self.rax_sketch.axis('off')
 
 
@@ -149,13 +149,14 @@ class WG00_widget:
         np.random.seed(1234567890)
 
         if self.param['geometry'] == 'SHELL':
-            Rs = [0, 0.6]
-            Rd = [0, 1]
+            Rs = [0, 0.3]
+            Rd = [0.3, 1]
         elif self.param['geometry'] == 'DUSTY':
             Rs = [0, 1]
             Rd = [0, 1]
+        # in WG00 Rd=0.69, Rs=1, here we normalised Rd=1
         elif self.param['geometry'] == 'CLOUDY':
-            Rs = [0, 1.4]
+            Rs = [0, 1.45]
             Rd = [0, 1]
 
         rad_max=max(Rs[1],Rd[1])
