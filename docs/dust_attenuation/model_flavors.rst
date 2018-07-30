@@ -12,7 +12,7 @@ These models provide averages from the literature with the ability to
 interpolate between the observed data points.  In general, these average
 models have shapes that are not dependent on the amount of dust.
 
-The `COO` average attenuation model is based on a small number of
+The `C00` average attenuation model is based on a small number of
 starburst galaxies observed
 in the ultraviolet with the International Ultraviolet Explorer (IUE)
 supplemented with ground-based optical spectroscopy,
@@ -55,6 +55,9 @@ These models provide attenuation predictions based on dust radiative transfer
 calculations.  The attenuation curve strength and wavelength dependent shape
 are based on the amount of dust, star/dust geometry, and other
 parameters.
+
+Witt & Gordon 2000 (WG00)
+-------------------------
 
 The `WG00` attenuation models are based on DIRTY radiative transfer
 calculations for spherical galactic environments (shell, dusty, cloudy)
@@ -241,6 +244,169 @@ Shape fitting models
 These models allow for more arbitrary shapes to be modeled than the
 other model flavors.
 
-Noll.
+N09: modified Calzetti law from Noll et al. 2009
+------------------------------------------------
+
+Noll+09 first introduced a modified version of the `C00` law, allowing
+for a varying slope and the presence of a UV bump.
+
+Example `N09` models showing variation in slopes.
+A UV bump with an amplitude of 3.5 is added to the C00 law.
+
+.. plot::
+
+      import matplotlib.pyplot as plt
+      import numpy as np
+      import astropy.units as u
+
+      from dust_attenuation.averages import C00
+      from dust_attenuation.shapes import N09
+
+      fig, ax = plt.subplots()
+
+      # generate the curves and plot them
+      x = np.arange(1/2.2, 1/0.12,0.1)/u.micron
+
+      # Original Calzetti law
+      C00_model = C00(Av=1)
+      ax.plot(x, C00_model(1/x), label='C00', color='black', lw=2.5, ls='--')
+
+      slopes = [-1, -0.5, 0, 0.5, 1]
+      for slope in slopes:
+          att_model = N09(Av=1, ampl=3.5, slope=slope)
+          ax.plot(x, att_model(1/x), label=r'$\delta$ = %.2f' % (slope))
+
+      ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+      ax.set_ylabel('A(x) [mag]')
+
+      ax.legend(loc='best')
+      plt.title("N09 with varying slopes")
+      plt.show()
+
+Example `N09` models showing variation in UV bump amplitude.
+The central wavelength of the UV bump and its width are kept fixed 
+to 0.2175 and 0.035 microns respectively.
+
+.. plot::
+
+      import matplotlib.pyplot as plt
+      import numpy as np
+      import astropy.units as u
+
+      from dust_attenuation.averages import C00
+      from dust_attenuation.shapes import N09
+
+      fig, ax = plt.subplots()
+
+      # generate the curves and plot them
+      x = np.arange(1/2.2, 1/0.12,0.1)/u.micron
+
+      # Original Calzetti law
+      C00_model = C00(Av=1)
+      ax.plot(x, C00_model(1/x), label='C00', color='black', lw=2.5, ls='--')
+
+      amplitudes = [0, 1, 3.5, 7, 10]
+      for ampl in amplitudes:
+          att_model = N09(Av=1, ampl=ampl, slope=0)
+          ax.plot(x, att_model(1/x), label = 'ampl = %.2f' % (ampl))
+
+      ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+      ax.set_ylabel('A(x) [mag]')
+
+      ax.legend(loc='best')
+      plt.title("N09 with varying UV bump amplitudes")
+      plt.show()
+
+
+SBL18: modified version of N09
+-------------------------------
+
+`N09` first introduced a modified version of the `C00` law, allowing
+for a varying slope and the presence of a UV bump. In the original formalism,
+the UV bump is affected by the power law. In the `SBL18` class the UV bump is added 
+to the attenuation law after applying the power law.
+
+Example comparing variation in UV bump strength for `N09` and `SBL18` models.
+The slope is fixed to -0.5. Continuous and dashed lines are for `N09` and `SBL18` respectively.
+The UV bump amplitude of `N09` is stronger than `SBL18`.
+
+.. plot::
+
+      import matplotlib.pyplot as plt
+      import numpy as np
+      import astropy.units as u
+
+      from dust_attenuation.averages import C00
+      from dust_attenuation.shapes import N09, SBL18
+
+      fig, ax = plt.subplots()
+
+      # generate the curves and plot them
+      x = np.arange(1/2.2, 1/0.12,0.1)/u.micron
+
+      # Original Calzetti law
+      C00_model = C00(Av=1)
+      ax.plot(x, C00_model(1/x), label='C00', color='black', lw=2.5, ls='--')
+
+      amplitudes = [0, 1, 3.5, 7, 10]
+      color = iter(plt.cm.rainbow(np.linspace(0, 1, len(amplitudes))))
+
+      for ampl in amplitudes:
+          c = next(color)
+          att_model = N09(Av=1, ampl=ampl, slope=-0.5)
+          att_model2 = SBL18(Av=1, ampl=ampl, slope=-0.5)
+          ax.plot(x, att_model(1/x), color=c, label = 'ampl = %.2f' % (ampl))
+          ax.plot(x, att_model2(1/x), color=c, ls='--')
+
+      ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+      ax.set_ylabel('A(x) [mag]')
+
+      ax.legend(loc='best')
+      plt.title("N09 and SBL18 with varying UV bump amplitudes")
+      plt.show()
+
+
+The slope is now fixed to 0.5. Continuous and dashed lines are for `N09` and `SBL18` respectively.
+The UV bump amplitude of `N09` is now weaker than `SBL18`.
+
+.. plot::
+
+      import matplotlib.pyplot as plt
+      import numpy as np
+      import astropy.units as u
+
+      from dust_attenuation.averages import C00
+      from dust_attenuation.shapes import N09, SBL18
+
+      fig, ax = plt.subplots()
+
+      # generate the curves and plot them
+      x = np.arange(1/2.2, 1/0.12,0.1)/u.micron
+
+      # Original Calzetti law
+      C00_model = C00(Av=1)
+      ax.plot(x, C00_model(1/x), label='C00', color='black', lw=2.5, ls='--')
+
+      amplitudes = [0, 1, 3.5, 7, 10]
+      color = iter(plt.cm.rainbow(np.linspace(0, 1, len(amplitudes))))
+
+      for ampl in amplitudes:
+          c = next(color)
+          att_model = N09(Av=1, ampl=ampl, slope=0.5)
+          att_model2 = SBL18(Av=1, ampl=ampl, slope=0.5)
+          ax.plot(x, att_model(1/x), color=c, label = 'ampl = %.2f' % (ampl))
+          ax.plot(x, att_model2(1/x), color=c, ls='--')
+
+      ax.set_xlabel('$x$ [$\mu m^{-1}$]')
+      ax.set_ylabel('A(x) [mag]')
+
+      ax.legend(loc='best')
+      plt.title("N09 and SBL18 with varying UV bump amplitudes")
+      plt.show()
+
+
 Charlot & Fall.
-Others.
+---------------
+
+Others
+------

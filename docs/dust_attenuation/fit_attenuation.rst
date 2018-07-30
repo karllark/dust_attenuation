@@ -11,7 +11,7 @@ is chosen, and the fit performed.
 Example: C00 Fit
 ================
 
-In this example, a mock attenuation curve (C00 model with noise)
+In this example, a mock attenuation curve (`C00` model with noise)
 is fitted with the C00 model.
 
 .. plot::
@@ -70,9 +70,9 @@ is fitted with the C00 model.
 Example: Use WG00 to fit C00
 ============================
 
-In this example, we are using the WG00 attenuation curves to
-fit the Calzetti attenuation curve (C00 model) with Att(V) = 1 mag and noise.
-The two WGOO configurations that best fit both have SMC-type dust and are
+In this example, we are using the `WG00` attenuation curves to
+fit the Calzetti attenuation curve (`C00` model) with Att(V) = 1 mag and noise.
+The two `WG00` configurations that best fit both have SMC-type dust and are
 the SHELL geometry with clumpy dust distribution and the
 DUSTY geometry with homogeneous dust distribution.
 The best fit values of the amount of dust in the system are given as the
@@ -158,6 +158,94 @@ model radial A(V) values.
     plt.legend(loc='upper left', fontsize=18, ncol=2)
     plt.tight_layout()
     plt.show()
+
+
+Example: Use SBL18 to fit WG00
+================================
+
+In this example, we are using the modified Calzetti law from `N09`,
+with the modification of `SBL18`  to fit some attenuation curves
+computed with the radiative transfer model of `WG00`.
+We chose 2 attenuation curves from the WG00 models: 
+
+- MW dust type with the CLOUDY geometry, a clumpy local dust distribution and tau_V=1   
+- SMC dust type with the SHELL geometry, an homogeneous local dust distribution and tau_V=0.8
+
+The best fit values are given in the title of each figure:
+
+- gamma: width (FWHM) of the UV bump (in microns)
+- ampl: amplitude of the UV bump
+- slope: slope of the power law
+- Av: amount of dust in V band (in mag)
+
+.. plot::
+    :include-source:
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from astropy.modeling.fitting import LevMarLSQFitter
+    import astropy.units as u
+
+    from dust_attenuation.shapes import SBL18
+    from dust_attenuation.radiative_transfer import WG00
+
+    # Generate an attenuation curve with WG00 and add some noise
+    x = np.arange(1/2, 1/0.1, 0.1) / u.micron
+
+    x = 1 / x
+
+    # Wavelength of V band
+    x_Vband = 0.55
+
+    geometry = ['cloudy', 'shell']
+    dust_type = ['MW', 'SMC']
+    dust_distrib = ['clumpy', 'homogeneous']
+    tau_V = [1, 0.8]
+
+
+    for dust, geo, distrib, tau in zip(dust_type, geometry,
+                                       dust_distrib, tau_V): 
+    
+        # Create WG00 attenuation curves
+        # initialize the model
+        att_model = WG00(tau_V = tau, geometry = geo,
+                         dust_type = dust,
+                         dust_distribution = distrib)
+
+        y_nonoise = att_model(x)
+        noise = np.random.normal(0, 0.015, y_nonoise.shape)
+        y = y_nonoise + noise
+
+        # initialize the fitting model
+        att_init = SBL18(Av=1, slope=-0.5,ampl=3)
+
+        # Fix central wavelength of the UV bump
+        att_init.x0.fixed = True
+
+        # pick the fitter
+        fit = LevMarLSQFitter()
+
+        # fit the data to the FM90 model using the fitter
+        # use the initialized model as the starting point
+        att_fit = fit(att_init, x.value, y, maxiter=10000, acc=1e-20)
+
+        # plot the observed data, initial guess, and final fit
+        fig, ax = plt.subplots(figsize=(10,6))
+
+        ax.plot(1/x, y_nonoise, color='green', label='Exact WG00 curve', lw=3)
+        ax.plot(1/x, y, 'ko', label='Observed Curve', lw=0.3)
+        ax.plot(1/x.value, att_fit(x.value), label='Fitted model', lw=3)
+
+        ax.set_xlabel('$x$ [$\mu m^{-1}$]', size=16)
+        ax.set_ylabel('$Ax $', size=16)
+        ax.tick_params(labelsize=15)
+        ax.set_title('Fitting WG00 (%s / %s / %s / tau_V=%.2f) with SBL18\n\n Best fit: x0=%.2f, gamma=%.2f\n ampl=%.2f, slope=%.2f, Av=%.2f\n ' % (dust, geo, distrib, tau, att_fit.x0.value, att_fit.gamma.value, att_fit.ampl.value, att_fit.slope.value, att_fit.Av.value), size=16)
+
+        ax.legend(loc='best')
+        plt.tight_layout()
+        plt.show()
+
+
 
 More Examples
 =============

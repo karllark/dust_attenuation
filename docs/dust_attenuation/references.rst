@@ -8,6 +8,12 @@ C00: `Calzetti et al. 2000, ApJ, 533, 682
 WG00: `Witt & Gordon 2000, ApJ, 528, 799
 <http://adsabs.harvard.edu/abs/2000ApJ...528..799W>`_
 
+N09: `Noll et al. 2009, AA, 507, 1793
+<http://adsabs.harvard.edu/abs/2009A%26A...507.1793N>`_
+
+SBL18: `Salim, Boquien and Lee 2018, 859, 11
+<http://adsabs.harvard.edu/abs/2018ApJ...859...11S>`_
+
 Naming Convention
 =================
 
