@@ -424,3 +424,424 @@ def test_attenuation_WG00_attenuate_values(tauV, geometries, dust_types,
 
     # test
     np.testing.assert_allclose(tmodel.attenuate(x), cor_vals, atol=1e-10)
+
+@pytest.mark.parametrize("dust_type", ['smc', 'mw'])
+def test_extinction(dust_type):
+    # correct values are taken from the publicly available tables
+    # of Witt & Gordon (2000, ApJ, Volume 528, pp. 799-816)
+
+    # ensure parameters are lower cases
+    dust_type = dust_type.lower()
+
+    # testing wavelengths
+    x = np.array([1000., 1142., 1285., 1428., 1571., 1714., 1857., 2000.,
+                  2142., 2285., 2428., 2571., 2714., 2857., 3000., 3776.,
+                  4754., 5985., 7535., 9487., 11943., 15036., 18929.,
+                  23830., 30001])
+
+    # add units
+    x = x*1e-4 * u.micron
+
+    tmodel = WG00(1,dust_type=dust_type)
+
+    if dust_type == 'mw':
+        tau_tauV = np.array([5.238, 3.918, 3.182, 2.780, 2.584, 2.509,
+                                2.561, 2.843, 3.190, 2.910, 2.472, 2.194,
+                                2.022, 1.905, 1.818, 1.527, 1.199, 0.909,
+                                0.667, 0.440, 0.304, 0.210, 0.145, 0.100,
+                                0.069])
+    elif dust_type == 'smc':
+        tau_tauV = np.array([9.675, 7.440, 6.068, 5.167, 4.536, 4.074,
+                             3.700, 3.379, 3.101, 2.857, 2.642, 2.452,
+                             2.282, 2.133, 2.031, 1.610, 1.221, 0.880,
+                             0.630, 0.430, 0.272, 0.166, 0.111, 0.075,
+                             0.033])
+
+    np.testing.assert_allclose(tau_tauV, tmodel.get_extinction(x, 1)/1.086)
+
+@pytest.mark.parametrize("dust_type", ['smc', 'mw'])
+def test_albedo(dust_type):
+    # correct values are taken from the publicly available tables
+    # of Witt & Gordon (2000, ApJ, Volume 528, pp. 799-816)
+
+    # ensure parameters are lower cases
+    dust_type = dust_type.lower()
+
+    # testing wavelengths
+    x = np.array([1000., 1142., 1285., 1428., 1571., 1714., 1857., 2000.,
+                  2142., 2285., 2428., 2571., 2714., 2857., 3000., 3776.,
+                  4754., 5985., 7535., 9487., 11943., 15036., 18929.,
+                  23830., 30001])
+
+    # add units
+    x = x*1e-4 * u.micron
+
+    tmodel = WG00(1,dust_type=dust_type)
+
+    if dust_type == 'mw':
+        albedo = np.array([0.320, 0.409, 0.481, 0.526, 0.542, 0.536, 0.503,
+                           0.432, 0.371, 0.389, 0.437, 0.470, 0.486, 0.499,
+                           0.506, 0.498, 0.502, 0.491, 0.481, 0.500, 0.473,
+                           0.457, 0.448, 0.424, 0.400])
+
+    elif dust_type == 'smc':
+        albedo = np.array([0.400, 0.449, 0.473, 0.494, 0.508, 0.524, 0.529,
+                           0.528, 0.523, 0.520, 0.516, 0.511, 0.505, 0.513,
+                           0.515, 0.498, 0.494, 0.489, 0.484, 0.493, 0.475,
+                           0.465, 0.439, 0.417, 0.400 ])
+
+    np.testing.assert_allclose(albedo, tmodel.get_albedo(x))
+
+
+@pytest.mark.parametrize("dust_type", ['smc', 'mw'])
+def test_scattering_phase_function(dust_type):
+    # correct values are taken from the publicly available tables
+    # of Witt & Gordon (2000, ApJ, Volume 528, pp. 799-816)
+
+    # ensure parameters are lower cases
+    dust_type = dust_type.lower()
+
+    # testing wavelengths
+    x = np.array([1000., 1142., 1285., 1428., 1571., 1714., 1857., 2000.,
+                  2142., 2285., 2428., 2571., 2714., 2857., 3000., 3776.,
+                  4754., 5985., 7535., 9487., 11943., 15036., 18929.,
+                  23830., 30001])
+
+    # add units
+    x = x*1e-4 * u.micron
+
+    tmodel = WG00(1,dust_type=dust_type)
+
+    if dust_type == 'mw':
+        g = np.array([0.800, 0.783, 0.767, 0.756, 0.745, 0.736, 0.727,
+                      0.720, 0.712, 0.707, 0.702, 0.697, 0.691, 0.685,
+                      0.678, 0.646, 0.624, 0.597, 0.563, 0.545, 0.533,
+                      0.511, 0.480, 0.445, 0.420])
+
+    elif dust_type == 'smc':
+        g = np.array([0.800, 0.783, 0.767, 0.756, 0.745, 0.736, 0.727,
+                      0.720, 0.712, 0.707, 0.702, 0.697, 0.691, 0.685,
+                      0.678, 0.646, 0.624, 0.597, 0.563, 0.545, 0.533,
+                      0.511, 0.480, 0.445, 0.420])
+
+    np.testing.assert_allclose(g, tmodel.get_scattering_phase_function(x))
+
+
+
+def get_fsca_corr_vals(tauV, geo, dust, distrib):
+    # correct values are taken from the publicly available tables
+    # of Witt & Gordon (2000, ApJ, Volume 528, pp. 799-816)
+
+    # ensure parameters are lower cases
+    geo = geo.lower()
+    dust = dust.lower()
+    distrib = distrib.lower()
+
+    # testing wavelengths
+    x = np.array([1000., 1428., 1857., 2285., 2714., 3776., 7535.,
+                  9487., 18929., 30001])
+
+    # add units
+    x = x*1e-4 * u.micron
+
+    # correct values
+    if dust == 'smc':
+        if geo == 'shell':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.115, 0.225, 0.241, 0.218, 0.19,
+                                         0.153, 0.0722, 0.0526, 0.013,
+                                         0.00359])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.105, 0.183, 0.2, 0.184, 0.164,
+                                         0.136, 0.0679, 0.0503, 0.0127,
+                                         0.00354])
+
+        if geo == 'dusty':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.129, 0.183, 0.183, 0.161, 0.138,
+                                         0.109, 0.0502, 0.0364, 0.00895,
+                                         0.00247])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.104, 0.153, 0.158, 0.141, 0.123,
+                                         0.0993, 0.0481, 0.0353, 0.00879,
+                                         0.00243])
+
+        if geo == 'cloudy':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.063, 0.0948, 0.0978, 0.0868,
+                                         0.0759, 0.0603, 0.0284, 0.0207,
+                                         0.00512, 0.00141])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.0484, 0.0779, 0.0838, 0.0769,
+                                         0.0683, 0.0568, 0.0286, 0.0212,
+                                         0.00538, 0.0015])
+    elif dust == 'mw':
+        if geo == 'shell':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.128, 0.221, 0.201, 0.154, 0.171,
+                                         0.148, 0.0752, 0.0545, 0.0172,
+                                         0.00744])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.103, 0.187, 0.171, 0.129, 0.149,
+                                         0.132, 0.0706, 0.0521, 0.0168,
+                                         0.00731])
+
+        if geo == 'dusty':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.107, 0.162, 0.147, 0.115, 0.123,
+                                         0.105, 0.0524, 0.0377, 0.0118,
+                                         0.00511])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.0884, 0.142, 0.13, 0.1, 0.111,
+                                         0.0961, 0.05, 0.0365, 0.0116,
+                                         0.00503])
+
+        if geo == 'cloudy':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.0545, 0.0873, 0.0796, 0.0618,
+                                         0.0674, 0.0582, 0.0297, 0.0215,
+                                         0.00677, 0.00293])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.0437, 0.0776, 0.0712, 0.0539,
+                                         0.0619, 0.0551, 0.0297, 0.0219,
+                                         0.00709, 0.00309])
+
+    return x, cor_vals
+@pytest.mark.parametrize("tauV", [0.25])
+@pytest.mark.parametrize("geometries", ['shell', 'cloudy', 'dusty'])
+@pytest.mark.parametrize("dust_types", ['smc', 'mw'])
+@pytest.mark.parametrize("dust_distribs", ['homogeneous', 'clumpy'])
+def test_fsca_WG00(tauV, geometries, dust_types, dust_distribs):
+    # get the correct values
+    x, cor_vals = get_fsca_corr_vals(tauV, geometries, dust_types, dust_distribs)
+
+    # initialize model
+    tmodel = WG00(tauV, geometry=geometries, dust_type=dust_types,
+                  dust_distribution=dust_distribs)
+
+    # test
+    np.testing.assert_allclose(tmodel.get_fsca(x, tauV), cor_vals, atol=1e-10)
+
+
+def get_fdir_corr_vals(tauV, geo, dust, distrib):
+    # correct values are taken from the publicly available tables
+    # of Witt & Gordon (2000, ApJ, Volume 528, pp. 799-816)
+
+    # ensure parameters are lower cases
+    geo = geo.lower()
+    dust = dust.lower()
+    distrib = distrib.lower()
+
+    # testing wavelengths
+    x = np.array([1000., 1428., 1857., 2285., 2714., 3776., 7535.,
+                  9487., 18929., 30001])
+
+    # add units
+    x = x*1e-4 * u.micron
+
+    # correct values
+    if dust == 'smc':
+        if geo == 'shell':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.0717, 0.244, 0.363, 0.457, 0.535,
+                                        0.643, 0.841, 0.889, 0.969, 0.988])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.197, 0.344, 0.44, 0.515, 0.579,
+                                         0.67, 0.848, 0.892, 0.971, 0.991])
+
+        if geo == 'dusty':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.283, 0.451, 0.548, 0.619, 0.676,
+                                         0.753, 0.891, 0.924, 0.98, 0.994])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.376, 0.511, 0.591, 0.65, 0.699,
+                                         0.768, 0.894, 0.926, 0.98, 0.994])
+
+        if geo == 'cloudy':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.626, 0.706, 0.753, 0.79, 0.819,
+                                         0.862, 0.938, 0.956, 0.988, 0.997])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.67, 0.732, 0.771, 0.801, 0.827,
+                                         0.864, 0.936, 0.955, 0.988, 0.996])
+
+    elif dust == 'mw':
+        if geo == 'shell':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.239, 0.467, 0.496, 0.451, 0.575,
+                                         0.658, 0.833, 0.886, 0.962, 0.983])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.34, 0.523, 0.546, 0.51, 0.612,
+                                         0.683, 0.84, 0.89, 0.962, 0.982])
+
+        if geo == 'dusty':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.448, 0.626, 0.648, 0.614, 0.704,
+                                         0.763, 0.885, 0.922, 0.973, 0.987])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.508, 0.656, 0.674, 0.646, 0.724,
+                                         0.777, 0.889, 0.924, 0.974, 0.987])
+
+        if geo == 'cloudy':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.704, 0.794, 0.805, 0.788, 0.835,
+                                         0.867, 0.935, 0.955, 0.985, 0.993])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.731, 0.805, 0.814, 0.799, 0.84,
+                                         0.869, 0.933, 0.954, 0.984, 0.992])
+
+    return x, cor_vals
+
+@pytest.mark.parametrize("tauV", [0.25])
+@pytest.mark.parametrize("geometries", ['shell', 'cloudy', 'dusty'])
+@pytest.mark.parametrize("dust_types", ['smc', 'mw'])
+@pytest.mark.parametrize("dust_distribs", ['homogeneous', 'clumpy'])
+def test_fdir_WG00(tauV, geometries, dust_types, dust_distribs):
+    # get the correct values
+    x, cor_vals = get_fdir_corr_vals(tauV, geometries, dust_types, dust_distribs)
+
+    # initialize model
+    tmodel = WG00(tauV, geometry=geometries, dust_type=dust_types,
+                  dust_distribution=dust_distribs)
+
+    # test
+    np.testing.assert_allclose(tmodel.get_fdir(x, tauV), cor_vals, atol=1e-10)
+
+
+def get_fesc_corr_vals(tauV, geo, dust, distrib):
+    # correct values are taken from the publicly available tables
+    # of Witt & Gordon (2000, ApJ, Volume 528, pp. 799-816)
+
+    # ensure parameters are lower cases
+    geo = geo.lower()
+    dust = dust.lower()
+    distrib = distrib.lower()
+
+    # testing wavelengths
+    x = np.array([1000., 1428., 1857., 2285., 2714., 3776., 7535.,
+                  9487., 18929., 30001])
+
+    # add units
+    x = x*1e-4 * u.micron
+
+    # correct values
+    if dust == 'smc':
+        if geo == 'shell':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.187, 0.469, 0.605, 0.675, 0.725,
+                                         0.796, 0.913, 0.941, 0.982, 0.992])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.302, 0.527, 0.639, 0.699, 0.743,
+                                         0.806, 0.916, 0.943, 0.983, 0.995])
+
+        if geo == 'dusty':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.412, 0.635, 0.732, 0.78, 0.814,
+                                         0.862, 0.941, 0.96, 0.989, 0.997])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.48, 0.664, 0.749, 0.791, 0.822,
+                                         0.867, 0.942, 0.961, 0.989, 0.997])
+
+        if geo == 'cloudy':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.689, 0.801, 0.85, 0.877, 0.894,
+                                         0.922, 0.966, 0.977, 0.993, 0.998])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.719, 0.81, 0.855, 0.878, 0.896,
+                                         0.921, 0.965, 0.976, 0.993, 0.998])
+
+    elif dust == 'mw':
+        if geo == 'shell':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.367, 0.688, 0.697, 0.605, 0.745,
+                                         0.806, 0.908, 0.941, 0.979, 0.99])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.444, 0.71, 0.717, 0.639, 0.761,
+                                         0.815, 0.911, 0.942, 0.979, 0.989])
+
+        if geo == 'dusty':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.555, 0.788, 0.794, 0.73, 0.827,
+                                         0.868, 0.937, 0.96, 0.985, 0.992])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.596, 0.799, 0.804, 0.746, 0.835,
+                                         0.873, 0.939, 0.96, 0.986, 0.992])
+
+        if geo == 'cloudy':
+            if distrib == 'homogeneous':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.759, 0.881, 0.885, 0.85, 0.903,
+                                         0.925, 0.964, 0.977, 0.992, 0.996])
+
+            elif distrib == 'clumpy':
+                if tauV == 0.25:
+                    cor_vals = np.array([0.775, 0.882, 0.885, 0.853, 0.902,
+                                         0.924, 0.963, 0.976, 0.991, 0.995])
+
+    return x, cor_vals
+
+@pytest.mark.parametrize("tauV", [0.25])
+@pytest.mark.parametrize("geometries", ['shell', 'cloudy', 'dusty'])
+@pytest.mark.parametrize("dust_types", ['smc', 'mw'])
+@pytest.mark.parametrize("dust_distribs", ['homogeneous', 'clumpy'])
+def test_fesc_WG00(tauV, geometries, dust_types, dust_distribs):
+    # get the correct values
+    x, cor_vals = get_fesc_corr_vals(tauV, geometries, dust_types, dust_distribs)
+
+    # initialize model
+    tmodel = WG00(tauV, geometry=geometries, dust_type=dust_types,
+                  dust_distribution=dust_distribs)
+
+    # test
+    np.testing.assert_allclose(tmodel.get_fesc(x, tauV), cor_vals, atol=1e-10)
