@@ -42,8 +42,8 @@ Installation
 
   How to install <dust_attenuation/install.rst>
 
-  Repository
-  ==========
+Repository
+==========
 
   GitHub: `dust_attenuation <https://github.com/karllark/dust_attenuation>`_
 
