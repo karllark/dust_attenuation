@@ -15,7 +15,7 @@ In contrast, dust extinction refers to the effects of dust on measurements
 of a single star.  In this case, dust absorbs and scatters photons out of
 the line-of-sight, but the contribution from scattered photons into the
 line-of-sight is negligible.  For extinction models, see
-the `dust_extinction package<http://dust-extinction.readthedocs.io/>`_.
+the `dust_extinction package <http://dust-extinction.readthedocs.io/>`_.
 
 This package is developed in the
 `astropy affiliated package <http://www.astropy.org/affiliated/>`_
@@ -45,7 +45,7 @@ Installation
 Repository
 ==========
 
-  GitHub: `dust_attenuation <https://github.com/karllark/dust_attenuation>`_
+GitHub: `dust_attenuation <https://github.com/karllark/dust_attenuation>`_
 
 Quick Start
 ===========
