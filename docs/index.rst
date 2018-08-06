@@ -2,10 +2,10 @@
 Interstellar Dust Attenuation
 #############################
 
-``dust_attenuation`` is a python package to provide interstellar dust
-attenuation curves.
+``dust_attenuation`` is a python package to provide models of
+interstellar dust attenuation curves.
 
-Attenuation describe the effects of dust on a group of stars.  The effects
+Attenuation describes the effects of dust on a group of stars.  The effects
 include in attenuation are dust absorption, dust scattering out of the
 line-of-sight, and dust scattering into the line-of-sight.  In general,
 attenuation models are used to model or correct the effects of dust on
@@ -15,8 +15,7 @@ In contrast, dust extinction refers to the effects of dust on measurements
 of a single star.  In this case, dust absorbs and scatters photons out of
 the line-of-sight, but the contribution from scattered photons into the
 line-of-sight is negligible.  For extinction models, see
-the `dust_attenuation <https://github.com/karllark/dust_attenuation>`_ package.
-
+the `dust_extinction package <http://dust-extinction.readthedocs.io/>`_.
 
 This package is developed in the
 `astropy affiliated package <http://www.astropy.org/affiliated/>`_
@@ -42,6 +41,11 @@ Installation
   :maxdepth: 2
 
   How to install <dust_attenuation/install.rst>
+
+Repository
+==========
+
+GitHub: `dust_attenuation <https://github.com/karllark/dust_attenuation>`_
 
 Quick Start
 ===========
@@ -95,5 +99,7 @@ Reference API
 .. automodapi:: dust_attenuation.averages
 
 .. automodapi:: dust_attenuation.radiative_transfer
+
+.. automodapi:: dust_attenuation.shapes
 
 .. automodapi:: dust_attenuation.baseclasses
