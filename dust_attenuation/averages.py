@@ -53,7 +53,7 @@ class C00(BaseAttAvModel):
            ax.plot(1/x,att_model(x),label=r'A$_V$ = %.2f mag' % (cur_Av))
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)$ [mag]')
+        ax.set_ylabel('$Att(x)$ [mag]')
 
         ax.legend(loc='best')
         plt.show()
@@ -189,7 +189,7 @@ class L02(BaseAttAvModel):
         fig, ax = plt.subplots()
 
         # generate the curves and plot them
-        x = np.arange(0.1,0.18,0.1)*u.micron
+        x = np.arange(0.1,0.18,0.01)*u.micron
 
         Avs = [0.1,0.5,1.0,2.0,5.0]
         for cur_Av in Avs:
@@ -197,7 +197,7 @@ class L02(BaseAttAvModel):
            ax.plot(1/x,att_model(x),label=r'A$_V$ = %.2f mag' % (cur_Av))
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$A(x)$ [mag]')
+        ax.set_ylabel('$Att(x)$ [mag]')
 
         ax.legend(loc='best')
         plt.show()
