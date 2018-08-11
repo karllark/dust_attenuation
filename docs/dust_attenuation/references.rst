@@ -8,6 +8,9 @@ C00: `Calzetti et al. 2000, ApJ, 533, 682
 WG00: `Witt & Gordon 2000, ApJ, 528, 799
 <http://adsabs.harvard.edu/abs/2000ApJ...528..799W>`_
 
+L02: `Leitherer et al. 2002, ApJS, 140, issue 2, 303
+<http://adsabs.harvard.edu/abs/2002ApJS..140..303L>`_
+
 N09: `Noll et al. 2009, AA, 507, 1793
 <http://adsabs.harvard.edu/abs/2009A%26A...507.1793N>`_
 

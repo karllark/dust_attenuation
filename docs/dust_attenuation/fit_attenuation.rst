@@ -157,7 +157,12 @@ model radial A(V) values.
     plt.tick_params(labelsize=15)
     plt.legend(loc='upper left', fontsize=18, ncol=2)
     plt.tight_layout()
-    plt.show()
+    #plt.show()
+
+.. image:: ./plots/Fit_C00_with_WG00.png
+   :scale: 50 %
+   :align: center
+
 
 
 Example: Use SBL18 to fit WG00
@@ -190,7 +195,7 @@ The best fit values are given in the title of each figure:
     from dust_attenuation.radiative_transfer import WG00
 
     # Generate an attenuation curve with WG00 and add some noise
-    x = np.arange(1/2, 1/0.1, 0.1) / u.micron
+    x = np.arange(1/2, 1/0.1, 0.2) / u.micron
 
     x = 1 / x
 
@@ -230,16 +235,17 @@ The best fit values are given in the title of each figure:
         att_fit = fit(att_init, x.value, y, maxiter=10000, acc=1e-20)
 
         # plot the observed data, initial guess, and final fit
-        fig, ax = plt.subplots(figsize=(10,6))
+        #fig, ax = plt.subplots(figsize=(10,6))
+        fig, ax = plt.subplots()
 
         ax.plot(1/x, y_nonoise, color='green', label='Exact WG00 curve', lw=3)
         ax.plot(1/x, y, 'ko', label='Observed Curve', lw=0.3)
         ax.plot(1/x.value, att_fit(x.value), label='Fitted model', lw=3)
 
         ax.set_xlabel('$x$ [$\mu m^{-1}$]', size=16)
-        ax.set_ylabel('$Ax $', size=16)
+        ax.set_ylabel('$Att(x)$ [mag]', size=16)
         ax.tick_params(labelsize=15)
-        ax.set_title('Fitting WG00 (%s / %s / %s / tau_V=%.2f) with SBL18\n\n Best fit: x0=%.2f, gamma=%.2f\n ampl=%.2f, slope=%.2f, Av=%.2f\n ' % (dust, geo, distrib, tau, att_fit.x0.value, att_fit.gamma.value, att_fit.ampl.value, att_fit.slope.value, att_fit.Av.value), size=16)
+        ax.set_title('Fitting WG00 with SBL18 \n(%s / %s / %s / tau_V=%.2f)\n\n Best fit: x0=%.2f, gamma=%.2f\n ampl=%.2f, slope=%.2f, Av=%.2f\n ' % (dust, geo, distrib, tau, att_fit.x0.value, att_fit.gamma.value, att_fit.ampl.value, att_fit.slope.value, att_fit.Av.value), size=16)
 
         ax.legend(loc='best')
         plt.tight_layout()
