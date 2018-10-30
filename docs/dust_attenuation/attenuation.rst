@@ -27,9 +27,6 @@ transfer effects.  Such radiative transfer calculations require specifying the
 geometry of the photon emitters (stars) and dust grains as well as the grain
 details (size, shape, composition).
 
-TBD: add in 2 star example from SFChapter illustrating the two effects
-in the simplest case.
-
 Attenuation includes the effects of having multiple sources extinguished by
 different columns of dust and the scattering of photons into the observation
 beam.  Unlike extinction, these two effects mean that the attenuation is not
@@ -87,6 +84,48 @@ plot shows the same curves normalized by Att(V).
       ax[1].legend(loc='best')
       plt.tight_layout()
       plt.show()
+
+The impact of the two radiative transfer effects can be illustrated using one of
+the simply system composed of a slab of dust with uniform dust density and two
+stars embedded to varying depths.  These calculations used the DIRTY radiative
+transfer model (Gordon et al. 2001; Misselt et al. 2001) and a variant of the
+TRUST slab benchmark geometry (Gordon et al. 2017).  There are 4 different
+geometrical model variants, with the only change being the location of the 1st
+star in the slab varying from on the surface nearest the observer to half way
+through the slab.  The 2nd star is always located at the back of the slab as
+seen by the observer.  The V band optical depth is 2 along the line-of-sight
+from the observer to star 2.  The geometry of these 4 model variants is
+illustrated in the lower, left panel of the figure below.
+
+The upper, left panel in the plot illustrates the impact of varying the
+extinction towards star 1 while keeping the extinction to star 2 fixed. The
+normalized attenuation curves change shape drastically, even through the
+normalized extinction curve towards both stars is identical. This is the impact
+of having multiple sources in a system, each seen through a different dust
+column and this is the 1st radiative transfer effect.  The upper, right panel
+gives the attenuation curves for the same models, but now including the
+contribution from scattered photons into the observer's line-of-sight - the 2nd
+radiative transfer effect.  The lower, right panel gives the fraction of the
+total flux from the system due to this scattered flux.  The wavelength where the
+scattered flux peaks is a combination of the total optical depth of the system
+and the impact of multiple scatterings. Note that the total attenuation as
+measured in the V band is always less when the contribution from scattered flux
+into the observer's line-of-sight is included (numbers given in the legends).
+
+.. image:: ./plots/2star_mix_dirty.png
+   :scale: 50 %
+   :align: center
+
+References
+----------
+
+Calzetti et al. 2000, ApJ, 533, 682
+
+Gordon et al. 2001, ApJ, 551, 269
+
+Gordon et al. 2017, ApJ, 551, 277
+
+Misselt et al. 2001, A&A, 603, A114
 
 Extinction
 ==========
