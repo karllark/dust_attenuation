@@ -108,12 +108,13 @@ class C00(BaseAttAvModel):
         axEbv[uv2vis_indxs] = (2.659 * (-2.156 +
                                         1.509 * 1 / x[uv2vis_indxs] -
                                         0.198 * 1 / x[uv2vis_indxs] ** 2 +
-                                        0.011 * 1 / x[uv2vis_indxs] ** 3) + self.Rv)
+                                        0.011 * 1 / x[uv2vis_indxs] ** 3) +
+                               self.Rv)
 
-        axEbv[nir_indxs] = 2.659 * (-1.857 + 1.040 * 1 / x[nir_indxs]) + self.Rv
+        axEbv[nir_indxs] = (2.659 * (-1.857 + 1.040 * 1 / x[nir_indxs]) +
+                            self.Rv)
 
         return axEbv
-
 
     def evaluate(self, x, Av):
         """
@@ -205,9 +206,8 @@ class L02(BaseAttAvModel):
 
     x_range = x_range_L02
 
-    # Assume same rv as for Calzetti 2000
+    # Assume same rv as for Calzetti 2000
     Rv = 4.05
-
 
     def k_lambda(self, x):
         """ Compute the starburst reddening curve of Leitherer et al. (2002)
@@ -249,8 +249,6 @@ class L02(BaseAttAvModel):
                           2.620 * 1e-3 / x**3))
 
         return axEbv
-
-
 
     def evaluate(self, x, Av):
         """
