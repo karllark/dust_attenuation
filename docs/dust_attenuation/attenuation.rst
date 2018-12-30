@@ -48,7 +48,7 @@ directly proportional to the amount of dust in the system. Hence the ratio of
 attenuations at two different wavelengths *varies* with the amount total system
 dust. In other words, the shape of the attenuation curve varies with the
 total amount of dust in the system unlike the case for extinction.
-This is illustrated below with ``WG00`` shell, with clumpy ``mw`` models, where the
+This is illustrated below with ``WG00`` shell, with clumpy mw models, where the
 left plot shows the total attenuation as a function of wavelength and the right
 plot shows the same curves normalized by Att(V).
 
