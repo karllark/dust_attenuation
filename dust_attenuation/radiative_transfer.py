@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 import numpy as np
 import astropy.units as u
 import pkg_resources
@@ -121,7 +120,7 @@ class WG00(BaseAtttauVModel):
         elif self.dust_type == 'smc':
             start = 25
 
-        # Column names
+        # Column names
         tau_colname = 'tau'
         tau_att_colname = 'tau_att'
         fsca_colname = 'f(sca)'
@@ -147,25 +146,25 @@ class WG00(BaseAtttauVModel):
         fesc_list = []
 
         len_data = len(data['lambda'])
-        # number of lines between 2 models
+        # number of lines between 2 models
         steps = 25
 
         counter = start
         while counter < len_data:
-            tau_att_list.append(np.array(data[tau_att_colname][counter:
-                                                        counter+steps]))
-            tau_list.append(np.array(data[tau_colname][counter:
-                                                        counter+steps]))
-            fsca_list.append(np.array(data[fsca_colname][counter:
-                                                        counter+steps]))
-            fdir_list.append(np.array(data[fdir_colname][counter:
-                                                        counter+steps]))
-            fesc_list.append(np.array(data[fesc_colname][counter:
-                                                        counter+steps]))
+            tau_att_list.append(
+                np.array(data[tau_att_colname][counter:counter+steps]))
+            tau_list.append(
+                np.array(data[tau_colname][counter:counter+steps]))
+            fsca_list.append(
+                np.array(data[fsca_colname][counter:counter+steps]))
+            fdir_list.append(
+                np.array(data[fdir_colname][counter:counter+steps]))
+            fesc_list.append(
+                np.array(data[fesc_colname][counter:counter+steps]))
 
             counter += int(2*steps)
 
-        # Convert to np.array and take transpose to have (wvl, tau_V)
+        # Convert to np.array and take transpose to have (wvl, tau_V)
         tau_att_table = np.array(tau_att_list).T
         tau_table = np.array(tau_list).T
         fsca_table = np.array(fsca_list).T
@@ -176,15 +175,16 @@ class WG00(BaseAtttauVModel):
         wvl = np.array(data['lambda'][0:25])
         self.wvl_grid = wvl
 
-        # Grid for the optical depth
-        tau_V_grid = np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5,
-                               4.0, 4.5, 5.0, 5.5, 6.0, 7.0, 8.0, 9.0, 10.0,
-                               15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0])
+        # Grid for the optical depth
+        tau_V_grid = np.array([0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 2.5, 3.0,
+                               3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 7.0, 8.0,
+                               9.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0,
+                               40.0, 45.0, 50.0])
 
-        # Create a 2D tabular model for tau_att and all flux fraction
+        # Create a 2D tabular model for tau_att and all flux fraction
         tab = tabular_model(2, name='2D_table')
 
-        # Values corresponding to the x and y grid points
+        # Values corresponding to the x and y grid points
         gridpoints = (wvl, tau_V_grid)
 
         self.model = tab(gridpoints, lookup_table=tau_att_table,
@@ -192,24 +192,23 @@ class WG00(BaseAtttauVModel):
                          fill_value=None, method='linear')
 
         self.tau = tab(gridpoints, lookup_table=tau_table,
-                         name='tau_WG00', bounds_error=False,
-                         fill_value=None, method='linear')
+                       name='tau_WG00', bounds_error=False,
+                       fill_value=None, method='linear')
 
         self.fsca = tab(gridpoints, lookup_table=fsca_table,
-                         name='fsca_WG00', bounds_error=False,
-                         fill_value=None, method='linear')
+                        name='fsca_WG00', bounds_error=False,
+                        fill_value=None, method='linear')
 
         self.fdir = tab(gridpoints, lookup_table=fdir_table,
-                         name='fdir_WG00', bounds_error=False,
-                         fill_value=None, method='linear')
+                        name='fdir_WG00', bounds_error=False,
+                        fill_value=None, method='linear')
 
         self.fesc = tab(gridpoints, lookup_table=fesc_table,
-                         name='fesc_WG00', bounds_error=False,
-                         fill_value=None, method='linear')
-
+                        name='fesc_WG00', bounds_error=False,
+                        fill_value=None, method='linear')
 
         # In Python 2: super(WG00, self) 
-        # In Python 3: super() but super(WG00, self) still works
+        # In Python 3: super() but super(WG00, self) still works
         super(WG00, self).__init__(tau_V=tau_V)
 
     def evaluate(self, x, tau_V):
@@ -257,7 +256,7 @@ class WG00(BaseAtttauVModel):
 
         taux = self.model(xinterp, yinterp)
 
-        # Convert optical depth to attenuation
+        # Convert optical depth to attenuation
         Attx = 1.086 * taux
 
         return Attx
@@ -308,7 +307,6 @@ class WG00(BaseAtttauVModel):
         yinterp = tau_V * np.ones(n_x)
 
         return self.tau(xinterp, yinterp) * 1.086
-
 
     def get_fsca(self, x, tau_V):
         """
@@ -451,7 +449,6 @@ class WG00(BaseAtttauVModel):
 
         return self.fesc(xinterp, yinterp)
 
-
     def get_albedo(self, x):
         """
         Return the albedo in function of wavelength for the corresponding
@@ -490,7 +487,6 @@ class WG00(BaseAtttauVModel):
 
         # setup the ax vectors
         x = np.atleast_1d(x)
-        n_x = len(x)
 
         alb_MW = np.array([0.320, 0.409, 0.481, 0.526, 0.542, 0.536, 0.503,
                            0.432, 0.371, 0.389, 0.437, 0.470, 0.486, 0.499,
@@ -500,7 +496,7 @@ class WG00(BaseAtttauVModel):
         alb_SMC = np.array([0.400, 0.449, 0.473, 0.494, 0.508, 0.524, 0.529,
                             0.528, 0.523, 0.520, 0.516, 0.511, 0.505, 0.513,
                             0.515, 0.498, 0.494, 0.489, 0.484, 0.493, 0.475,
-                            0.465, 0.439, 0.417, 0.400 ])
+                            0.465, 0.439, 0.417, 0.400])
 
         if self.dust_type == 'smc':
             albedo = alb_SMC
@@ -509,7 +505,7 @@ class WG00(BaseAtttauVModel):
 
         tab = tabular_model(1, name='Tabular1D')
         alb_fit = tab(self.wvl_grid, lookup_table=albedo, name='albedo',
-                  bounds_error=False, fill_value=None, method='linear')
+                      bounds_error=False, fill_value=None, method='linear')
 
         xinterp = 1e4 * x
 
@@ -553,7 +549,6 @@ class WG00(BaseAtttauVModel):
 
         # setup the ax vectors
         x = np.atleast_1d(x)
-        n_x = len(x)
 
         g_MW = np.array([0.800, 0.783, 0.767, 0.756, 0.745, 0.736, 0.727,
                          0.720, 0.712, 0.707, 0.702, 0.697, 0.691, 0.685,
@@ -572,7 +567,7 @@ class WG00(BaseAtttauVModel):
 
         tab = tabular_model(1, name='Tabular1D')
         g_fit = tab(self.wvl_grid, lookup_table=g, name='albedo',
-                  bounds_error=False, fill_value=None, method='linear')
+                    bounds_error=False, fill_value=None, method='linear')
 
         xinterp = 1e4 * x
 

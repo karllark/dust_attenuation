@@ -79,7 +79,7 @@ class N09(BaseAttAvModel):
     x_range = x_range_N09
 
     # Did not want to create a new base class only for this particular model.
-    # So parameters are defined here.
+    # So parameters are defined here.
 
     x0 = Parameter(description="bump: centroid", default=0.2175, min=0)
 
@@ -88,10 +88,10 @@ class N09(BaseAttAvModel):
     ampl = Parameter(description="bump: amplitude ", default=0, min=0)
 
     slope = Parameter(description="slope: slope of the power law",
-                            default=0., min=-3., max=3.)
+                      default=0., min=-3., max=3.)
 
-    # Had to redefine the Av parameter though it is defined in the parent class.
-    # May be beause new Parameters are defined here?...
+    # Had to redefine the Av parameter though it is defined in the parent class
+    # May be beause new Parameters are defined here?...
 
     Av = Parameter(description="Av: attenuation in V band ",
                    default=1.0, min=0.0)
@@ -192,10 +192,8 @@ class N09(BaseAttAvModel):
         if (value < 0.0):
             raise InputParameterError("parameter Av must be positive")
 
-
-    # Rv from Calzetti 2000
+    # Rv from Calzetti 2000
     Rv_C00 = 4.05
-
 
     def uv_bump(self, x, x0, gamma, ampl):
         """
@@ -227,8 +225,7 @@ class N09(BaseAttAvModel):
 
         """
         return ampl * (x**2 * gamma**2 /
-                            ((x**2 - x0**2)**2 + x**2 * gamma**2))
-
+                       ((x**2 - x0**2)**2 + x**2 * gamma**2))
 
     def power_law(self, x, slope):
         """ Power law normalised at 0.55 microns (V band).
@@ -248,7 +245,6 @@ class N09(BaseAttAvModel):
         """
 
         return (x / 0.55)**slope
-
 
     def k_lambda(self, x, x0, gamma, ampl, slope):
         """ Compute the starburst reddening curve k'(λ)=A(λ)/E(B-V)
@@ -303,18 +299,17 @@ class N09(BaseAttAvModel):
         mask_C00 = x > 0.15
         axEbv[mask_C00] = C00().k_lambda(x[mask_C00])
 
-        # Use recipe of Leitherer 2002 below 0.15 microns
+        # Use recipe of Leitherer 2002 below 0.15 microns
         mask_L02 = x <= 0.15
         axEbv[mask_L02] = L02().k_lambda(x[mask_L02])
 
-        # Add the UV bump using the Drude profile
+        # Add the UV bump using the Drude profile
         axEbv += self.uv_bump(x, x0, gamma, ampl)
 
-        # Multiply the reddening curve with a power law with varying slope
+        # Multiply the reddening curve with a power law with varying slope
         axEbv *= self.power_law(x, slope)
 
         return axEbv
-
 
     def evaluate(self, x, x0, gamma, ampl, slope, Av):
         """
@@ -357,7 +352,6 @@ class N09(BaseAttAvModel):
         ax = axEbv / self.Rv_C00 * Av
 
         return ax
-
 
 
 class SBL18(N09):
@@ -478,14 +472,14 @@ class SBL18(N09):
         mask_C00 = x > 0.15
         axEbv[mask_C00] = C00().k_lambda(x[mask_C00])
 
-        # Use recipe of Leitherer 2002 below 0.15 microns
+        # Use recipe of Leitherer 2002 below 0.15 microns
         mask_L02 = x <= 0.15
         axEbv[mask_L02] = L02().k_lambda(x[mask_L02])
 
-        # Multiply the reddening curve with a power law with varying slope
+        # Multiply the reddening curve with a power law with varying slope
         axEbv *= self.power_law(x, slope)
 
-        # Add the UV bump using the Drude profile
+        # Add the UV bump using the Drude profile
         axEbv += self.uv_bump(x, x0, gamma, ampl)
 
         return axEbv
