@@ -48,7 +48,7 @@ directly proportional to the amount of dust in the system. Hence the ratio of
 attenuations at two different wavelengths *varies* with the amount total system
 dust. In other words, the shape of the attenuation curve varies with the
 total amount of dust in the system unlike the case for extinction.
-This is illustrated below with ``WG00`` shell, with clumpy mw models, where the
+This is illustrated below with "WG00" shell, clumpy, mw models, where the
 left plot shows the total attenuation as a function of wavelength and the right
 plot shows the same curves normalized by Att(V).
 
@@ -104,7 +104,7 @@ plot shows the same curves normalized by Att(V).
 
 The impact of the two radiative transfer effects can be illustrated using one of
 the simple systems composed of a slab of dust with uniform dust density and two
-stars embedded in varying depths.  These calculations used the DIRTY radiative
+stars embedded to varying depths.  These calculations used the DIRTY radiative
 transfer model (Gordon et al. 2001; Misselt et al. 2001) and a variant of the
 TRUST slab benchmark geometry (Gordon et al. 2017).  There are 4 different
 geometrical model variants, with the only change being the location of the 1\ :sup:`st`
