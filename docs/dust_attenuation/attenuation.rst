@@ -4,6 +4,9 @@
 Attenuation versus Extinction
 #############################
 
+.. note:: All extinction curves are attenuation curves, but not all attenuation
+          curves are extinction curves.
+
 Attenuation
 ===========
 
@@ -14,7 +17,7 @@ on the spectrum of an object due to the presence of dust.  Attenuation does
 not include the impact of the dust re-emission on an object's spectrum.
 In general, the term attenuation is used to indicate that the
 geometry of the sources and dust in a system is more complex than a single star
-with a foreground screen of dust.  In this simple case the effects of forground
+with a foreground screen of dust.  In this simple case, the effects of foreground
 dust on a single star are termed extinction to distinguish it from
 the more complex geometrical cases.  Examples of such complex geometries exhibiting
 attenuation
@@ -28,7 +31,7 @@ been done for samples of galaxies (e.g., starbursts: Calzetti et al. 1994, 2000;
 local galaxies: Wild et al. 2011, Battisti et al. 2016, 2017;
 & distant galaxies: Reddy et al. 2015.) or by
 using a model for the stellar populations and attenuation shape in that galaxy
-(e.g., Conroy 2010; Buat et al., 2011, 2012, 2018;  Kriek et Conroy, 2013;
+(e.g., Conroy 2010; Buat et al., 2011, 2012, 2018;  Kriek & Conroy, 2013;
 Salmon et al., 2016).
 
 Theoretically calculating the attenuation curves can be done using dust
@@ -45,7 +48,7 @@ directly proportional to the amount of dust in the system. Hence the ratio of
 attenuations at two different wavelengths *varies* with the amount total system
 dust. In other words, the shape of the attenuation curve varies with the
 total amount of dust in the system unlike the case for extinction.
-This is illustrated below with `WG00` shell, clumpy, mw models where the
+This is illustrated below with "WG00" shell, clumpy, mw models, where the
 left plot shows the total attenuation as a function of wavelength and the right
 plot shows the same curves normalized by Att(V).
 
@@ -66,6 +69,7 @@ plot shows the same curves normalized by Att(V).
       # defined for normalization
       x_Vband = 0.55
 
+      # TODO: Make plots color-blind friendly?
       att_model = WG00(tau_V = 0.5, geometry = 'shell',
                        dust_type = 'mw', dust_distribution = 'clumpy')
       ax[0].plot(x,att_model(x), label = r'$\tau(V) = 0.5$')
@@ -99,13 +103,13 @@ plot shows the same curves normalized by Att(V).
       plt.show()
 
 The impact of the two radiative transfer effects can be illustrated using one of
-the simply system composed of a slab of dust with uniform dust density and two
+the simple systems composed of a slab of dust with uniform dust density and two
 stars embedded to varying depths.  These calculations used the DIRTY radiative
 transfer model (Gordon et al. 2001; Misselt et al. 2001) and a variant of the
 TRUST slab benchmark geometry (Gordon et al. 2017).  There are 4 different
-geometrical model variants, with the only change being the location of the 1st
+geometrical model variants, with the only change being the location of the 1\ :sup:`st`
 star in the slab varying from on the surface nearest the observer to half way
-through the slab.  The 2nd star is always located at the back of the slab as
+through the slab.  The 2\ :sup:`nd` star is always located at the back of the slab as
 seen by the observer.  The V band optical depth is 2 along the line-of-sight
 from the observer to star 2.  The geometry of these 4 model variants is
 illustrated in the lower, left panel of the figure below.
@@ -115,9 +119,9 @@ extinction towards star 1 while keeping the extinction to star 2 fixed. The
 normalized attenuation curves change shape drastically, even through the
 normalized extinction curve towards both stars is identical. This is the impact
 of having multiple sources in a system, each seen through a different dust
-column and this is the 1st radiative transfer effect.  The upper, right panel
+column and this is the 1\ :sup:`st` radiative transfer effect.  The upper, right panel
 gives the attenuation curves for the same models, but now including the
-contribution from scattered photons into the observer's line-of-sight - the 2nd
+contribution from scattered photons into the observer's line-of-sight - the 2\ :sup:`nd`
 radiative transfer effect.  The lower, right panel gives the fraction of the
 total flux from the system due to this scattered flux.  The wavelength where the
 scattered flux peaks is a combination of the total optical depth of the system
@@ -135,7 +139,7 @@ understand the radiative effects in different dust-star geometries
 Seon & Draine 2016).  Recently, Law et al. 2018 made publicly available a
 grid of galaxy SEDs from the UV to IR/sub-mm where a stellar population
 synthesis model responsible for the stellar & gas photons is connected to
-the infrared emission through dust grain physics using the DIRTY
+the IR emission through dust grain physics using the DIRTY
 radiative transfer model.
 
 
@@ -197,7 +201,7 @@ through a column of dust.
 Both dust absorption and scattering out of the line-of-sight are processes
 that are directly proportional to the amount of dust along the line-of-sight.
 As a result, the ratio of dust extinctions at two different wavelengths
-does not vary with different amounts of dust, i.e. the shape of the extinction
+does not vary with different amounts of dust, i.e., the shape of the extinction
 curve is independent of the amount of dust in the system.  This makes the measurement
 and/or theoretical calculation of extinction much simpler than the more
 general case of attenuation.
@@ -205,6 +209,3 @@ general case of attenuation.
 The separate package `dust_extinction package
 <http://dust-extinction.readthedocs.io/>`_ exists to provide extinction
 models.
-
-Note: all extinction curves are attenuation curves, but not all attenuation
-curves are extinction curves.
