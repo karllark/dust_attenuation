@@ -21,7 +21,7 @@ Build checks/status
    :target: https://github.com/karllark/dust_attenuation/actions/
    :alt: Test Status
 
- .. image:: https://codecov.io/gh/karllark/dust_attenuation/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/karllark/dust_attenuation/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/karllark/dust_attenuation
    :alt: Test Coverage Status
 
