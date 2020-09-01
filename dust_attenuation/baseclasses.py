@@ -11,9 +11,6 @@ class BaseAttModel(Fittable1DModel):
     Base Attenuation Model.  Do not use.
     """
 
-    inputs = ("x",)
-    outputs = ("ax",)
-
     def attenuate(self, x):
         """
         Calculate the attenuation as a fraction

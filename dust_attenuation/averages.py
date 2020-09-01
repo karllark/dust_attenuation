@@ -207,7 +207,6 @@ class L02(BaseAttAvModel):
         ax.legend(loc='best')
         plt.show()
     """
-
     x_range = x_range_L02
 
     # Assume same rv as for Calzetti 2000
