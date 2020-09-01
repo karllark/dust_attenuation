@@ -68,8 +68,8 @@ class N09(BaseAttAvModel):
             att_model = N09(Av=1,ampl=3.5,slope=slope)
             ax.plot(x,att_model(1/x),label=r'$\delta$ = %.2f' % (slope))
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('A(x) [mag]')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'A(x) [mag]')
 
         ax.legend(loc='best')
         plt.title("Noll09 with varying slopes")
@@ -311,9 +311,9 @@ class N09(BaseAttAvModel):
 
         return axEbv
 
-    def evaluate(self, x, x0, gamma, ampl, slope, Av):
+    def evaluate(self, x, Av, x0, gamma, ampl, slope):
         """
-        C00 function
+        N09 function
 
         Parameters
         ----------
@@ -321,6 +321,9 @@ class N09(BaseAttAvModel):
            expects either x in units of wavelengths or frequency
            or assumes wavelengths in [micron]
            internally microns are used
+
+        Av: float
+           attenuation in V band.
 
         x0: float
            Central wavelength of the UV bump (in microns).
@@ -334,9 +337,6 @@ class N09(BaseAttAvModel):
         slope: float
            Slope of the power law.
 
-        Av: float
-           attenuation in V band.
-
         Returns
         -------
         att: np array (float)
@@ -349,6 +349,7 @@ class N09(BaseAttAvModel):
         """
 
         axEbv = self.k_lambda(x, x0, gamma, ampl, slope)
+
         ax = axEbv / self.Rv_C00 * Av
 
         return ax
@@ -361,6 +362,9 @@ class SBL18(N09):
 
     Parameters
     ----------
+    Av: float
+        attenuation in V band.
+
     x0: float
         Central wavelength of the UV bump (in microns).
 
@@ -372,9 +376,6 @@ class SBL18(N09):
 
     slope: float
         Slope of the power law.
-
-    Av: float
-        attenuation in V band.
 
     Raises
     ------
