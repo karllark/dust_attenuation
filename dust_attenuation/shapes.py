@@ -9,14 +9,14 @@ from .helpers import _test_valid_x_range
 from .averages import C00, L02
 from astropy.modeling import Parameter, InputParameterError
 
-__all__ = ['N09', 'SBL18']
+__all__ = ["N09", "SBL18"]
 
 x_range_N09 = [0.097, 2.2]
 x_range_SBL18 = [0.097, 2.2]
 
 
 class N09(BaseAttAvModel):
-    """
+    r"""
     Attenuation curve using a modified version of the Calzetti law
     allowing for a varying UV slope and the presence of a UV bump.
 
@@ -87,14 +87,14 @@ class N09(BaseAttAvModel):
 
     ampl = Parameter(description="bump: amplitude ", default=0, min=0)
 
-    slope = Parameter(description="slope: slope of the power law",
-                      default=0., min=-3., max=3.)
+    slope = Parameter(
+        description="slope: slope of the power law", default=0.0, min=-3.0, max=3.0
+    )
 
     # Had to redefine the Av parameter though it is defined in the parent class
     # May be beause new Parameters are defined here?...
 
-    Av = Parameter(description="Av: attenuation in V band ",
-                   default=1.0, min=0.0)
+    Av = Parameter(description="Av: attenuation in V band ", default=1.0, min=0.0)
 
     @x0.validator
     def x0(self, value):
@@ -112,7 +112,7 @@ class N09(BaseAttAvModel):
            Input x0 values outside of defined range
         """
 
-        if (value < 0.0):
+        if value < 0.0:
             raise InputParameterError("parameter x0 must be positive")
 
     @gamma.validator
@@ -131,7 +131,7 @@ class N09(BaseAttAvModel):
            Input gamma values outside of defined range
         """
 
-        if (value < 0.0):
+        if value < 0.0:
             raise InputParameterError("parameter gamma must be positive")
 
     @ampl.validator
@@ -150,7 +150,7 @@ class N09(BaseAttAvModel):
            Input ampl values outside of defined range
         """
 
-        if (value < 0.0):
+        if value < 0.0:
             raise InputParameterError("parameter ampl must be positive")
 
     @slope.validator
@@ -170,8 +170,7 @@ class N09(BaseAttAvModel):
         """
 
         if (value < -3.0) or (value > 3.0):
-            raise InputParameterError("parameter slope must be between "
-                                      "-3.0 and 3.0")
+            raise InputParameterError("parameter slope must be between " "-3.0 and 3.0")
 
     @Av.validator
     def Av(self, value):
@@ -189,7 +188,7 @@ class N09(BaseAttAvModel):
            Input Av values outside of defined range
         """
 
-        if (value < 0.0):
+        if value < 0.0:
             raise InputParameterError("parameter Av must be positive")
 
     # Rv from Calzetti 2000
@@ -224,8 +223,9 @@ class N09(BaseAttAvModel):
            Input x values outside of defined range
 
         """
-        return ampl * (x**2 * gamma**2 /
-                       ((x**2 - x0**2)**2 + x**2 * gamma**2))
+        return ampl * (
+            x ** 2 * gamma ** 2 / ((x ** 2 - x0 ** 2) ** 2 + x ** 2 * gamma ** 2)
+        )
 
     def power_law(self, x, slope):
         """ Power law normalised at 0.55 microns (V band).
@@ -244,7 +244,7 @@ class N09(BaseAttAvModel):
            power law
         """
 
-        return (x / 0.55)**slope
+        return (x / 0.55) ** slope
 
     def k_lambda(self, x, x0, gamma, ampl, slope):
         """ Compute the starburst reddening curve k'(λ)=A(λ)/E(B-V)
@@ -290,7 +290,7 @@ class N09(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_N09, 'N09')
+        _test_valid_x_range(x, x_range_N09, "N09")
 
         # setup the axEbv vectors
         axEbv = np.zeros(len(x))
@@ -355,7 +355,7 @@ class N09(BaseAttAvModel):
 
 
 class SBL18(N09):
-    """
+    r"""
     Attenuation curve using a modified version of the Calzetti law
     allowing for a varying UV slope and the presence of a UV bump.
 
@@ -463,7 +463,7 @@ class SBL18(N09):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_SBL18, 'SBL18')
+        _test_valid_x_range(x, x_range_SBL18, "SBL18")
 
         # setup the axEbv vectors
         axEbv = np.zeros(len(x))

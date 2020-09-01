@@ -16,11 +16,13 @@ def _test_valid_x_range(x, x_range, outname):
     outname: str
        name of curve for error message
     """
-    if np.logical_or(np.any(x < x_range[0]),
-                     np.any(x > x_range[1])):
-        raise ValueError('Input x outside of range defined for ' + outname
-                         + ' ['
-                         + str(x_range[0])
-                         + ' <= x <= '
-                         + str(x_range[1])
-                         + ', x has units micron]')
+    if np.logical_or(np.any(x < x_range[0]), np.any(x > x_range[1])):
+        raise ValueError(
+            "Input x outside of range defined for "
+            + outname
+            + " ["
+            + str(x_range[0])
+            + " <= x <= "
+            + str(x_range[1])
+            + ", x has units micron]"
+        )

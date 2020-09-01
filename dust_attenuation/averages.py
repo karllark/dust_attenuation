@@ -6,14 +6,14 @@ import astropy.units as u
 from .baseclasses import BaseAttAvModel
 from .helpers import _test_valid_x_range
 
-__all__ = ['C00', 'L02']
+__all__ = ["C00", "L02"]
 
 x_range_C00 = [0.12, 2.2]
 x_range_L02 = [0.097, 0.18]
 
 
 class C00(BaseAttAvModel):
-    """
+    r"""
     Attenuation curve of Calzetti et al. (2000)
 
     Parameters
@@ -52,8 +52,8 @@ class C00(BaseAttAvModel):
            att_model = C00(Av=cur_Av)
            ax.plot(1/x,att_model(x),label=r'A$_V$ = %.2f mag' % (cur_Av))
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$Att(x)$ [mag]')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$Att(x)$ [mag]')
 
         ax.legend(loc='best')
         plt.show()
@@ -95,7 +95,7 @@ class C00(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_C00, 'C00')
+        _test_valid_x_range(x, x_range_C00, "C00")
 
         # setup the ax vectors
         n_x = len(x)
@@ -105,14 +105,18 @@ class C00(BaseAttAvModel):
         uv2vis_indxs = np.where(np.logical_and(0.12 <= x, x < 0.63))
         nir_indxs = np.where(np.logical_and(0.63 <= x, x < 2.2))
 
-        axEbv[uv2vis_indxs] = (2.659 * (-2.156 +
-                                        1.509 * 1 / x[uv2vis_indxs] -
-                                        0.198 * 1 / x[uv2vis_indxs] ** 2 +
-                                        0.011 * 1 / x[uv2vis_indxs] ** 3) +
-                               self.Rv)
+        axEbv[uv2vis_indxs] = (
+            2.659
+            * (
+                -2.156
+                + 1.509 * 1 / x[uv2vis_indxs]
+                - 0.198 * 1 / x[uv2vis_indxs] ** 2
+                + 0.011 * 1 / x[uv2vis_indxs] ** 3
+            )
+            + self.Rv
+        )
 
-        axEbv[nir_indxs] = (2.659 * (-1.857 + 1.040 * 1 / x[nir_indxs]) +
-                            self.Rv)
+        axEbv[nir_indxs] = 2.659 * (-1.857 + 1.040 * 1 / x[nir_indxs]) + self.Rv
 
         return axEbv
 
@@ -149,7 +153,7 @@ class C00(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_C00, 'C00')
+        _test_valid_x_range(x, x_range_C00, "C00")
 
         ax = self.k_lambda(x) / self.Rv * Av
 
@@ -157,7 +161,7 @@ class C00(BaseAttAvModel):
 
 
 class L02(BaseAttAvModel):
-    """
+    r"""
     Attenuation curve of Leitherer et al. (2002).
     Narrow validity range: 0.097 to 0.18 microns
 
@@ -197,13 +201,12 @@ class L02(BaseAttAvModel):
            att_model = L02(Av=cur_Av)
            ax.plot(1/x,att_model(x),label=r'A$_V$ = %.2f mag' % (cur_Av))
 
-        ax.set_xlabel('$x$ [$\mu m^{-1}$]')
-        ax.set_ylabel('$Att(x)$ [mag]')
+        ax.set_xlabel(r'$x$ [$\mu m^{-1}$]')
+        ax.set_ylabel(r'$Att(x)$ [mag]')
 
         ax.legend(loc='best')
         plt.show()
     """
-
     x_range = x_range_L02
 
     # Assume same rv as for Calzetti 2000
@@ -242,11 +245,9 @@ class L02(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_L02, 'L02')
+        _test_valid_x_range(x, x_range_L02, "L02")
 
-        axEbv = (5.472 + (0.671 * 1 / x -
-                          9.218 * 1e-3 / x**2 +
-                          2.620 * 1e-3 / x**3))
+        axEbv = 5.472 + (0.671 * 1 / x - 9.218 * 1e-3 / x ** 2 + 2.620 * 1e-3 / x ** 3)
 
         return axEbv
 
@@ -283,7 +284,7 @@ class L02(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_L02, 'L02')
+        _test_valid_x_range(x, x_range_L02, "L02")
 
         ax = self.k_lambda(x) / self.Rv * Av
 
