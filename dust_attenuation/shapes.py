@@ -302,7 +302,7 @@ class N09(BaseAttAvModel):
         # Use recipe of Leitherer 2002 below 0.15 microns
         mask_L02 = x <= 0.15
         mask_L02 &= x >= L02.x_range[0]
-        
+
         axEbv[mask_L02] = L02().k_lambda(x[mask_L02])
 
         # Add the UV bump using the Drude profile
@@ -421,10 +421,9 @@ class SBL18(N09):
         plt.title("SBL18 with varying slopes")
         plt.show()
     """
-    
+
     x_range = x_range_SBL18
-    
-    
+
     def k_lambda(self, x, x0, gamma, ampl, slope):
         """ Compute the starburst reddening curve k'(λ)=A(λ)/E(B-V)
         using recipe of Calzetti 2000 and Leitherer 2002
