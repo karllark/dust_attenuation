@@ -295,7 +295,7 @@ class WG00(BaseAtttauVModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_WG00, "WG00")
+        _test_valid_x_range(x, self.x_range, "WG00")
 
         # setup the ax vectors
         n_x = len(x)
@@ -346,7 +346,7 @@ class WG00(BaseAtttauVModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_WG00, "WG00")
+        _test_valid_x_range(x, self.x_range, "WG00")
 
         # setup the ax vectors
         x = np.atleast_1d(x)
@@ -393,7 +393,7 @@ class WG00(BaseAtttauVModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_WG00, "WG00")
+        _test_valid_x_range(x, self.x_range, "WG00")
 
         # setup the ax vectors
         x = np.atleast_1d(x)
@@ -440,7 +440,7 @@ class WG00(BaseAtttauVModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_WG00, "WG00")
+        _test_valid_x_range(x, self.x_range, "WG00")
 
         # setup the ax vectors
         x = np.atleast_1d(x)
@@ -487,7 +487,7 @@ class WG00(BaseAtttauVModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_WG00, "WG00")
+        _test_valid_x_range(x, self.x_range, "WG00")
 
         # setup the ax vectors
         x = np.atleast_1d(x)
@@ -532,7 +532,7 @@ class WG00(BaseAtttauVModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_WG00, "WG00")
+        _test_valid_x_range(x, self.x_range, "WG00")
 
         # setup the ax vectors
         x = np.atleast_1d(x)
@@ -650,7 +650,7 @@ class WG00(BaseAtttauVModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_WG00, "WG00")
+        _test_valid_x_range(x, self.x_range, "WG00")
 
         # setup the ax vectors
         x = np.atleast_1d(x)
