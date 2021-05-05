@@ -301,7 +301,7 @@ class N09(BaseAttAvModel):
 
         # Use recipe of Leitherer 2002 below 0.15 microns
         mask_L02 = x <= 0.15
-        mask_L02 &= x > L02.x_range[0]
+        mask_L02 &= x >= L02.x_range[0]
         
         axEbv[mask_L02] = L02().k_lambda(x[mask_L02])
 
