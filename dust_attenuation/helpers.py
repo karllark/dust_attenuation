@@ -44,7 +44,7 @@ def _positive_klambda(klam):
     kout: float array
         array clipped to zero if necessary
     """
-    if not np.all(klam > 0):
+    if not np.all(klam >= 0):
         warnings.warn('k-lambda has negative values, setting them to zero.',
                        AstropyUserWarning)
         return np.maximum(klam, 0.)
