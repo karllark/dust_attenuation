@@ -4,7 +4,7 @@ import numpy as np
 import astropy.units as u
 
 from .baseclasses import BaseAttAvModel
-from .helpers import _test_valid_x_range
+from .helpers import _test_valid_x_range, _positive_klambda
 
 from .averages import C00, L02
 from astropy.modeling import Parameter, InputParameterError
@@ -311,7 +311,7 @@ class N09(BaseAttAvModel):
         # Multiply the reddening curve with a power law with varying slope
         axEbv *= self.power_law(x, slope)
 
-        return np.maximum(axEbv, 0.)
+        return _positive_klambda(axEbv)
 
     def evaluate(self, x, Av, x0, gamma, ampl, slope):
         """
@@ -487,4 +487,4 @@ class SBL18(N09):
         # Add the UV bump using the Drude profile
         axEbv += self.uv_bump(x, x0, gamma, ampl)
 
-        return np.maximum(axEbv, 0.)
+        return _positive_klambda(axEbv)

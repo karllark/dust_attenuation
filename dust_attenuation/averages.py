@@ -4,7 +4,7 @@ import numpy as np
 import astropy.units as u
 
 from .baseclasses import BaseAttAvModel
-from .helpers import _test_valid_x_range
+from .helpers import _test_valid_x_range, _positive_klambda
 
 __all__ = ["C00", "L02"]
 
@@ -118,7 +118,7 @@ class C00(BaseAttAvModel):
 
         axEbv[nir_indxs] = 2.659 * (-1.857 + 1.040 * 1 / x[nir_indxs]) + self.Rv
 
-        return np.maximum(axEbv, 0.)
+        return _positive_klambda(axEbv)
 
     def evaluate(self, x, Av):
         """
@@ -249,7 +249,7 @@ class L02(BaseAttAvModel):
 
         axEbv = 5.472 + (0.671 * 1 / x - 9.218 * 1e-3 / x ** 2 + 2.620 * 1e-3 / x ** 3)
 
-        return np.maximum(axEbv, 0.)
+        return _positive_klambda(axEbv)
 
     def evaluate(self, x, Av):
         """
