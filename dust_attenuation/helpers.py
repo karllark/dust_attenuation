@@ -1,4 +1,6 @@
+import warnings
 import numpy as np
+from astropy.utils.exceptions import AstropyUserWarning
 
 
 def _test_valid_x_range(x, x_range, outname):
@@ -26,3 +28,25 @@ def _test_valid_x_range(x, x_range, outname):
             + str(x_range[1])
             + ", x has units micron]"
         )
+
+
+def _positive_klambda(klam):
+    """
+    Check that k-lambda arrays have no negative values
+    
+    Parameters
+    ----------
+    klam: float array
+        k-lambda array, which should only have positive values
+
+    Returns
+    -------
+    kout: float array
+        array clipped to zero if necessary
+    """
+    if not np.all(klam >= 0):
+        warnings.warn('k-lambda has negative values, setting them to zero.',
+                       AstropyUserWarning)
+        return np.maximum(klam, 0.)
+    else:
+        return klam

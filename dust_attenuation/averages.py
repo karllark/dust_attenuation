@@ -4,7 +4,7 @@ import numpy as np
 import astropy.units as u
 
 from .baseclasses import BaseAttAvModel
-from .helpers import _test_valid_x_range
+from .helpers import _test_valid_x_range, _positive_klambda
 
 __all__ = ["C00", "L02"]
 
@@ -95,7 +95,7 @@ class C00(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_C00, "C00")
+        _test_valid_x_range(x, self.x_range, "C00")
 
         # setup the ax vectors
         n_x = len(x)
@@ -103,7 +103,7 @@ class C00(BaseAttAvModel):
 
         # define the ranges
         uv2vis_indxs = np.where(np.logical_and(0.12 <= x, x < 0.63))
-        nir_indxs = np.where(np.logical_and(0.63 <= x, x < 2.2))
+        nir_indxs = np.where(np.logical_and(0.63 <= x, x < self.x_range[1]))
 
         axEbv[uv2vis_indxs] = (
             2.659
@@ -118,7 +118,7 @@ class C00(BaseAttAvModel):
 
         axEbv[nir_indxs] = 2.659 * (-1.857 + 1.040 * 1 / x[nir_indxs]) + self.Rv
 
-        return axEbv
+        return _positive_klambda(axEbv)
 
     def evaluate(self, x, Av):
         """
@@ -153,7 +153,7 @@ class C00(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_C00, "C00")
+        _test_valid_x_range(x, self.x_range, "C00")
 
         ax = self.k_lambda(x) / self.Rv * Av
 
@@ -245,11 +245,11 @@ class L02(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_L02, "L02")
+        _test_valid_x_range(x, self.x_range, "L02")
 
         axEbv = 5.472 + (0.671 * 1 / x - 9.218 * 1e-3 / x ** 2 + 2.620 * 1e-3 / x ** 3)
 
-        return axEbv
+        return _positive_klambda(axEbv)
 
     def evaluate(self, x, Av):
         """
@@ -284,7 +284,7 @@ class L02(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_L02, "L02")
+        _test_valid_x_range(x, self.x_range, "L02")
 
         ax = self.k_lambda(x) / self.Rv * Av
 

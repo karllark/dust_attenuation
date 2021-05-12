@@ -4,7 +4,7 @@ import numpy as np
 import astropy.units as u
 
 from .baseclasses import BaseAttAvModel
-from .helpers import _test_valid_x_range
+from .helpers import _test_valid_x_range, _positive_klambda
 
 from .averages import C00, L02
 from astropy.modeling import Parameter, InputParameterError
@@ -290,7 +290,7 @@ class N09(BaseAttAvModel):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_N09, "N09")
+        _test_valid_x_range(x, self.x_range, "N09")
 
         # setup the axEbv vectors
         axEbv = np.zeros(len(x))
@@ -301,6 +301,8 @@ class N09(BaseAttAvModel):
 
         # Use recipe of Leitherer 2002 below 0.15 microns
         mask_L02 = x <= 0.15
+        mask_L02 &= x >= L02.x_range[0]
+
         axEbv[mask_L02] = L02().k_lambda(x[mask_L02])
 
         # Add the UV bump using the Drude profile
@@ -309,7 +311,7 @@ class N09(BaseAttAvModel):
         # Multiply the reddening curve with a power law with varying slope
         axEbv *= self.power_law(x, slope)
 
-        return axEbv
+        return _positive_klambda(axEbv)
 
     def evaluate(self, x, Av, x0, gamma, ampl, slope):
         """
@@ -420,6 +422,8 @@ class SBL18(N09):
         plt.show()
     """
 
+    x_range = x_range_SBL18
+
     def k_lambda(self, x, x0, gamma, ampl, slope):
         """ Compute the starburst reddening curve k'(λ)=A(λ)/E(B-V)
         using recipe of Calzetti 2000 and Leitherer 2002
@@ -464,7 +468,7 @@ class SBL18(N09):
         x = x_quant.value
 
         # check that the wavenumbers are within the defined range
-        _test_valid_x_range(x, x_range_SBL18, "SBL18")
+        _test_valid_x_range(x, self.x_range, "SBL18")
 
         # setup the axEbv vectors
         axEbv = np.zeros(len(x))
@@ -483,4 +487,4 @@ class SBL18(N09):
         # Add the UV bump using the Drude profile
         axEbv += self.uv_bump(x, x0, gamma, ampl)
 
-        return axEbv
+        return _positive_klambda(axEbv)
