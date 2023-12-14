@@ -115,5 +115,5 @@ more information.
 
 .. _AstroPy: https://www.astropy.org/
 .. _contributing: https://docs.astropy.org/en/stable/index.html#contributing
-.. _developer: https://docs.astropy.org/en/stable/index.html#developer-documentation
+.. _developer: https://docs.astropy.org/en/latest/index_dev.html
 .. _Astropy Code of Conduct:  https://www.astropy.org/about.html#codeofconduct
