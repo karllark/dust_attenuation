@@ -25,10 +25,6 @@ Build checks/status
    :target: https://codecov.io/gh/karllark/dust_attenuation
    :alt: Test Coverage Status
 
-.. image:: https://img.shields.io/lgtm/grade/python/g/karllark/dust_attenuation.svg?logo=lgtm&logoWidth=18
-   :target: https://lgtm.com/projects/g/karllark/dust_attenuation/context:python
-   :alt: LGTM Status
-
 .. image:: https://app.codacy.com/project/badge/Grade/0f272a569b954b2abac766a3900941ce
    :target: https://www.codacy.com/manual/kgordon/dust_attenuation?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karllark/dust_attenuation&amp;utm_campaign=Badge_Grade
    :alt: Codacy Status
