@@ -13,7 +13,7 @@ python fashion after downloading it from the git repo::
 Using pip
 =========
 
-``dust_extinction`` can also be installed using pip::
+``dust_attenuation`` can also be installed using pip::
 
     # from PyPI
     not yet

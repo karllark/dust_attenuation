@@ -2,7 +2,7 @@
 
 import numpy as np
 import astropy.units as u
-import pkg_resources
+import importlib.resources as importlib_resources
 
 from astropy.io import ascii
 from astropy.modeling.tabular import tabular_model
@@ -112,9 +112,12 @@ class WG00(BaseAtttauVModel):
         self.dust_type = dust_type.lower()
         self.dust_distribution = dust_distribution.lower()
 
-        data_path = pkg_resources.resource_filename("dust_attenuation", "data/WG00/")
-
-        data = ascii.read(data_path + self.geometry + ".txt", header_start=0)
+        ref = (
+            importlib_resources.files("dust_attenuation")
+            / f"data/WG00/{self.geometry}.txt"
+        )
+        with importlib_resources.as_file(ref) as data_path:
+            data = ascii.read(data_path, header_start=0)
 
         if self.dust_type == "mw":
             start = 0
