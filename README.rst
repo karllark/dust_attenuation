@@ -10,6 +10,11 @@ To install::
 
     pip install git+https://github.com/karllark/dust_attenuation.git
 
+Documentation
+-------------
+
+Using readthedocs: <http://dust-attenuation.readthedocs.io>
+
 Build checks/status
 -------------------
 
@@ -26,7 +31,7 @@ Build checks/status
    :alt: Test Coverage Status
 
 .. image:: https://app.codacy.com/project/badge/Grade/0f272a569b954b2abac766a3900941ce
-   :target: https://www.codacy.com/manual/kgordon/dust_attenuation?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karllark/dust_attenuation&amp;utm_campaign=Badge_Grade
+   :target: https://app.codacy.com/gh/karllark/dust_attenuation/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade
    :alt: Codacy Status
 
 Packaging
@@ -35,11 +40,6 @@ Packaging
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
-
-Documenation
-------------
-
-Using readthedocs: <http://dust-attenuation.readthedocs.io>
 
 In Development!
 ---------------

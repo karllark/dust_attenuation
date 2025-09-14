@@ -36,7 +36,7 @@ class WG00_widget:
         self.axFF = plt.subplot2grid((4, 2), (3, 0), colspan=1, rowspan=1)
         self.axalb = plt.subplot2grid((4, 2), (3, 1), colspan=1, rowspan=1)
 
-        self.fig.canvas.set_window_title("widget for WG00 RT model")
+        self.fig.canvas.manager.set_window_title("widget for WG00 RT model")
         plt.subplots_adjust(bottom=0.15)
         plt.subplots_adjust(left=0.35)
         plt.subplots_adjust(hspace=0.8)
