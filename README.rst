@@ -10,6 +10,11 @@ To install::
 
     pip install git+https://github.com/karllark/dust_attenuation.git
 
+Documentation
+-------------
+
+Using readthedocs: <http://dust-attenuation.readthedocs.io>
+
 Build checks/status
 -------------------
 
@@ -35,11 +40,6 @@ Packaging
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
-
-Documenation
-------------
-
-Using readthedocs: <http://dust-attenuation.readthedocs.io>
 
 In Development!
 ---------------
